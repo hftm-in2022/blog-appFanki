@@ -1,1 +1,1 @@
-# blog-appFanki
+# angular-blogApp-simon-fankhauser
