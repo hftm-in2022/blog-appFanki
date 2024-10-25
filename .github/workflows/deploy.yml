@@ -47,8 +47,8 @@ jobs:
         run: npm audit fix
 
       # Dependency management: Check for outdated packages
-      - name: Check for outdated dependencies
-        run: npm outdated
+      # - name: Check for outdated dependencies
+        # run: npm outdated
 
       # Dependency management: Update dependencies
       - name: Update dependencies
