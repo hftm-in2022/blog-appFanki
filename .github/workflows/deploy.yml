@@ -28,7 +28,7 @@ jobs:
 
       # Run Unit Tests in Chrome Headless mode
       - name: Run Unit Tests
-        run: npm run test -- --watch=false --browsers=ChromeHeadlessCI
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
 
       # Build the project for production
       - name: Build the project
