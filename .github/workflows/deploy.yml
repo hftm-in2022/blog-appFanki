@@ -44,7 +44,7 @@ jobs:
 
       # Automatically check for Angular updates and apply them if necessary
       - name: Check for Angular updates
-        run: ng update --all --force
+        run: ng update --force
 
       # Deploy to Azure Web App
       - name: Deploy to Azure Web App
