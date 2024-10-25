@@ -22,6 +22,10 @@ jobs:
       # Install dependencies
       - run: npm install
 
+      # Install Angular CLI globally
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
       # Linting: Check for code quality issues
       - name: Run ESLint
         run: npm run lint
