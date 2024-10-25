@@ -13,7 +13,7 @@ jobs:
       # Checkout code from the repository
       - uses: actions/checkout@v2
 
-      # Set up Node.js environment with version 14
+      # Set up Node.js environment with version 20.x
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -38,13 +38,31 @@ jobs:
       - name: Build the project
         run: npm run build --prod
 
-      # Security audit: Check for vulnerabilities and fix them
+      # Security audit: Check for vulnerabilities
       - name: Run security audit
+        run: npm audit --audit-level=high
+
+      # Security audit: Automatically fix vulnerabilities
+      - name: Run security audit and fix
         run: npm audit fix
+
+      # Dependency management: Check for outdated packages
+      - name: Check for outdated dependencies
+        run: npm outdated
+
+      # Dependency management: Update dependencies
+      - name: Update dependencies
+        run: npm update
 
       # Automatically check for Angular updates and apply them if necessary
       - name: Check for Angular updates
         run: ng update --force
+
+      # Log into Azure to authenticate for deployment
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Deploy to Azure Web App
       - name: Deploy to Azure Web App
