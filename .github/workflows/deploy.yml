@@ -1,17 +1,26 @@
-name: Azure Deployment
+name: Azure Static Web Apps CI/CD with Deployment and Quality Checks
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
 
 jobs:
-  build:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
+    name: Build, Test, and Deploy Job
 
     steps:
       # Checkout code from the repository
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          lfs: false
 
       # Set up Node.js environment with version 20.x
       - name: Set up Node.js
@@ -46,29 +55,36 @@ jobs:
       - name: Run security audit and fix
         run: npm audit fix
 
-      # Dependency management: Check for outdated packages
-      # - name: Check for outdated dependencies
-        # run: npm outdated
-
       # Dependency management: Update dependencies
       - name: Update dependencies
         run: npm update
 
-      # Automatically check for Angular updates and apply them if necessary
+      # Check for Angular updates and apply them if necessary
       - name: Check for Angular updates
         run: ng update --force
 
-      # Log into Azure to authenticate for deployment
-      - name: Azure Login
-        uses: azure/login@v1
+      # Build And Deploy to Azure Static Web Apps
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_RIVER_0BBA8530F }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/" # App source code path
+          api_location: "api" # Api source code path - optional
+          output_location: "dist/BLOG-APP" # Built app content directory - optional
 
-      # Deploy to Azure Web App
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          app-name: 'BLOG-APP'
-          slot-name: 'Production'
-          package: .
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_RIVER_0BBA8530F }}
+          action: "close"
+          app_location: "/" # App source code path
