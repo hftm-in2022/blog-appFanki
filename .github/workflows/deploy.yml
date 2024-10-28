@@ -54,7 +54,7 @@ jobs:
         run: npm audit fix
 
       - name: Update dependencies (run locally if possible)
-        run: ng update --force
+        run: npm update
 
       - name: Build And Deploy
         id: builddeploy
