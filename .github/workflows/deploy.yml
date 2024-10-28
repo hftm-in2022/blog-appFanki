@@ -16,54 +16,46 @@ jobs:
     name: Build, Test, and Deploy Job
 
     steps:
-      # Checkout code from the repository
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
 
-      # Set up Node.js environment with version 20.x
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20.x'
 
-      # Install dependencies
-      - run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      # Install Angular CLI globally
-      - name: Install Angular CLI
-        run: npm install -g @angular/cli
-
-      # Linting: Check for code quality issues
       - name: Run ESLint
         run: npm run lint
 
-      # Run Unit Tests in Chrome Headless mode
       - name: Run Unit Tests
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
-      # Build the project for production
       - name: Build the project
-        run: npm run build --prod
+        run: npx ng build --prod
 
-      # Security audit: Check for vulnerabilities
       - name: Run security audit
         run: npm audit --audit-level=high
 
-      # Security audit: Automatically fix vulnerabilities
+      # Optionally remove or review `npm audit fix` in production environments
       - name: Run security audit and fix
         run: npm audit fix
 
-      # Dependency management: Update dependencies
-      - name: Update dependencies
-        run: npm update
-
-      # Check for Angular updates and apply them if necessary
-      - name: Check for Angular updates
+      - name: Update dependencies (run locally if possible)
         run: ng update --force
 
-      # Build And Deploy to Azure Static Web Apps
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -71,9 +63,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_RIVER_0BBA8530F }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/" # App source code path
-          api_location: "api" # Api source code path - optional
-          output_location: "dist/blog-app/browser" # Built app content directory - optional
+          app_location: "/"
+          api_location: "api"
+          output_location: "dist/blog-app/browser"
+          skip_app_build: true
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -87,4 +80,4 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_RIVER_0BBA8530F }}
           action: "close"
-          app_location: "/" # App source code path
+          app_location: "/"
