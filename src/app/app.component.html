@@ -1,23 +1,167 @@
-<h1>{{ title }}</h1>
+<h1 class="page-title">{{ title }}</h1>
 
-<!-- Demo-Komponente -->
-<app-demo></app-demo>
+<!-- Button zum Erstellen eines neuen Blogs -->
+<div class="create-blog-button">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="startCreatingNewBlog()"
+    aria-label="Neuen Blog erstellen"
+  >
+    Neuer Blog
+  </button>
+</div>
 
-<!-- Router Outlet -->
-<router-outlet></router-outlet>
+<!-- Nachricht anzeigen, wenn keine Blogs verfügbar sind -->
+<div *ngIf="blogs.length === 0 && !isLoading" class="no-blogs">
+  <p>Keine Blogs verfügbar.</p>
+</div>
 
-<!-- Blog-Liste -->
-<div class="blog-container">
-  <div *ngFor="let blog of blogs" class="blog-item">
-    <h2>{{ blog.title }}</h2>
-    <p>{{ blog.contentPreview }}</p>
-    <p>Autor: {{ blog.author }}</p>
-    <p>Likes: {{ blog.likes }}</p>
-    <p>Kommentare: {{ blog.comments }}</p>
-    <img
-      [src]="blog.headerImageUrl"
-      alt="Header Image"
-      *ngIf="blog.headerImageUrl"
-    />
+<!-- Ladeindikator -->
+<mat-spinner *ngIf="isLoading" diameter="40"></mat-spinner>
+
+<div class="blog-navigation" *ngIf="blogs.length > 0 && !isLoading">
+  <button
+    mat-icon-button
+    (click)="prevBlog()"
+    [disabled]="currentIndex === 0"
+    aria-label="Vorheriger Blog"
+  >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <div class="blog-container">
+    <mat-card *ngFor="let blog of displayedBlogs" class="blog-card">
+      <mat-card-header>
+        <mat-card-title
+          ><strong>{{ blog.title }}</strong></mat-card-title
+        >
+        <mat-card-subtitle>Autor: {{ blog.author }}</mat-card-subtitle>
+      </mat-card-header>
+      <img
+        mat-card-image
+        [src]="blog.headerImageUrl"
+        alt="Header Image"
+        *ngIf="blog.headerImageUrl"
+        loading="lazy"
+      />
+      <mat-card-content>
+        <p>{{ blog.contentPreview }}</p>
+        <p>Likes: {{ blog.likes }}</p>
+        <p>Kommentare: {{ blog.comments }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="viewDetails(blog.id)">
+          Mehr lesen
+        </button>
+        <button
+          mat-icon-button
+          (click)="toggleLike(blog)"
+          [ngClass]="{ liked: blog.likedByMe }"
+          aria-label="Like"
+        >
+          <mat-icon>thumb_up</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
+
+  <button
+    mat-icon-button
+    (click)="nextBlog()"
+    [disabled]="currentIndex + maxBlogs >= blogs.length"
+    aria-label="Nächster Blog"
+  >
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
+
+<!-- Formular zum Erstellen eines neuen Blogs -->
+<div class="new-blog-form" *ngIf="isCreatingNewBlog">
+  <mat-card>
+    <h2>Neuen Blog erstellen</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Titel</mat-label>
+      <input matInput [(ngModel)]="newBlog.title" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Autor</mat-label>
+      <input matInput [(ngModel)]="newBlog.author" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Inhalt</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="newBlog.contentPreview"
+        required
+      ></textarea>
+    </mat-form-field>
+    <button mat-button color="primary" (click)="saveNewBlog()">
+      Speichern
+    </button>
+    <button mat-button color="warn" (click)="isCreatingNewBlog = false">
+      Abbrechen
+    </button>
+  </mat-card>
+</div>
+
+<!-- Detailansicht des ausgewählten Blogs mit Bearbeitungsoption -->
+<div class="blog-details" *ngIf="selectedBlog">
+  <mat-card class="detailed-blog-card">
+    <mat-card-header>
+      <mat-card-title
+        ><strong>{{ selectedBlog.title }}</strong></mat-card-title
+      >
+      <mat-card-subtitle>Autor: {{ selectedBlog.author }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      mat-card-image
+      [src]="selectedBlog.headerImageUrl"
+      alt="Header Image"
+      *ngIf="selectedBlog.headerImageUrl"
+      loading="lazy"
+    />
+    <mat-card-content *ngIf="!isEditingBlog">
+      <p>{{ selectedBlog.contentPreview }}</p>
+      <p>Likes: {{ selectedBlog.likes }}</p>
+      <p>Kommentare: {{ selectedBlog.comments }}</p>
+    </mat-card-content>
+    <mat-card-content *ngIf="isEditingBlog">
+      <mat-form-field appearance="fill">
+        <mat-label>Titel</mat-label>
+        <input matInput [(ngModel)]="selectedBlog.title" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Inhalt</mat-label>
+        <textarea matInput [(ngModel)]="selectedBlog.contentPreview"></textarea>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="closeDetails()"
+        aria-label="Schließen"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        color="primary"
+        *ngIf="!isEditingBlog"
+        (click)="startEditingBlog()"
+        aria-label="Bearbeiten"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button
+        mat-button
+        color="primary"
+        *ngIf="isEditingBlog"
+        (click)="saveEditedBlog()"
+      >
+        Speichern
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>
