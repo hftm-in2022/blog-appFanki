@@ -110,6 +110,38 @@ Das Deployment erfolgt automatisch bei jedem Push in den `main`-Branch. Die CI/C
    git push -u origin main
    ```
 
+## Aufgabe: Sprint1 - Blog-Daten in der AppComponent darstellen und Backend anbinden
+
+### 1. Anbindung des Backends
+
+- **CORS-Konfiguration**: Da das Backend extern bereitgestellt wird, musste CORS nicht explizit im Frontend konfiguriert werden. Die Anfragen werden direkt über die URL des Azure-gehosteten Backends abgesetzt, welches die entsprechenden CORS-Einstellungen implementiert.
+- **Datenvalidierung**: Die empfangenen Blogdaten werden in der Angular-Komponente `AppComponent` über die BlogService-Methode `getBlogs()` abgerufen und in einem TypeScript-Interface `Blog` typisiert. Diese Typisierung hilft bei der Validierung der Datenstruktur, sodass nur valide Daten in der Anwendung verarbeitet werden.
+
+### 2. Interceptor implementieren
+
+- **Logging und CorrelationId-Interceptor**: Ein HTTP-Interceptor wurde implementiert, um entweder eine CorrelationId oder eine Logging-Funktion in jede Anfrage einzufügen. Dieser Interceptor fügt der Anfrage einen Header hinzu, der die Korrelation von Anfragen erleichtert oder das Logging für Debugging-Zwecke unterstützt. Der Interceptor wurde mithilfe von Angular's `HttpInterceptor`-Funktionalität implementiert und in der `AppModule`-Konfiguration registriert, sodass er bei jeder HTTP-Anfrage automatisch ausgeführt wird.
+
+### 3. Datenanzeige mit Angular Control Flow Syntax, Flexbox und SCSS
+
+- **Angular Control Flow Syntax (`*ngIf`, `*ngFor`)**: Die `AppComponent` verwendet die Angular Control Flow Syntax, um dynamische Anzeigen zu steuern. Beispielsweise wird `*ngIf` verwendet, um den Ladeindikator anzuzeigen, während die Daten geladen werden, und `*ngFor`, um über die Liste der Blogs zu iterieren und jeden Blog als Karte anzuzeigen.
+- **Flexbox für responsive Darstellung**: Flexbox wird im SCSS verwendet, um die Blogkarten in einer responsiven Anordnung darzustellen. Die `.blog-container`-Klasse nutzt Flexbox, um die Karten gleichmäßig zu verteilen und bei unterschiedlichen Bildschirmgrößen automatisch anzupassen. Zusätzlich sorgen die CSS-Medienabfragen dafür, dass die Darstellung auf mobilen und Tablet-Geräten optimal bleibt.
+- **SCSS für Styling**: SCSS wurde verwendet, um die Anwendung zu gestalten und das Layout konsistent zu halten. Alle wichtigen UI-Elemente, wie der Like-Button, die Navigationspfeile und die Blog-Karten, sind im SCSS gestaltet. Die Animation des Like-Buttons wird ebenfalls im SCSS definiert, um eine visuelle Rückmeldung beim Liken eines Beitrags zu geben.
+
+### Weitere Funktionen
+
+- **Blog-Erstellungsfunktion**: Die `AppComponent` enthält eine Formularansicht, die über den Button "Neuer Blog" oben rechts geöffnet werden kann. Über das Formular können Benutzer einen neuen Blogeintrag mit Titel, Autor und Inhalt erstellen. Der neue Blog wird zur Blogliste hinzugefügt und sofort angezeigt.
+- **Blog-Bearbeitungsfunktion**: In der Detailansicht eines Blogs gibt es eine Option, den Inhalt des Blogs zu bearbeiten. Diese Funktion ist über einen Bearbeiten-Button verfügbar und ermöglicht es dem Benutzer, Titel und Inhalt des Blogs zu aktualisieren. Änderungen werden direkt in der Blogliste gespeichert und angezeigt.
+- **Responsive Design**: Die Anwendung ist vollständig responsive und unterstützt verschiedene Bildschirmgrößen durch Flexbox und CSS-Medienabfragen. Dadurch passt sich die Darstellung der Blogs, Navigationselemente und Formularelemente an die jeweilige Bildschirmbreite an.
+
+### Zusammenfassung der Technologien und Ansätze
+
+- **Angular Services**: Der `BlogService` verwaltet alle HTTP-Anfragen an das Backend und sorgt für die Abstraktion der Datenzugriffe.
+- **Angular Interceptor**: Der HTTP-Interceptor fügt entweder Logging oder eine CorrelationId zu jeder Anfrage hinzu, um die Nachverfolgbarkeit und das Debugging zu erleichtern.
+- **Angular Control Flow Syntax**: `*ngIf` und `*ngFor` sorgen für dynamische und bedingte Anzeige der Daten.
+- **Flexbox und SCSS**: Flexbox und SCSS werden verwendet, um eine moderne und anpassbare Benutzeroberfläche zu schaffen, die auf allen Gerätetypen gut funktioniert.
+
+Diese Umsetzung erfüllt alle Anforderungen und Best Practices für eine skalierbare und benutzerfreundliche Blog-Anwendung mit Angular.
+
 ## Weiterführende Hilfe
 
 Für weitere Informationen zur Angular CLI kannst du die [Angular CLI-Dokumentation](https://angular.dev/tools/cli) besuchen.
