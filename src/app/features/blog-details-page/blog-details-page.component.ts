@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BlogService } from '../../services/blog.service';
 import { Blog } from '../../interfaces/blog';
-import { CommonModule } from '@angular/common'; // CommonModule importieren
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router'; // RouterModule importieren
 
 @Component({
   selector: 'app-blog-details-page',
   standalone: true,
-  imports: [CommonModule], // CommonModule hier hinzufügen
+  imports: [CommonModule, RouterModule], // RouterModule hier hinzufügen
   templateUrl: './blog-details-page.component.html',
   styleUrls: ['./blog-details-page.component.scss'],
 })
