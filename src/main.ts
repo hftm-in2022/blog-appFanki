@@ -8,7 +8,9 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { correlationIdInterceptor } from './app/interceptors/correlation-id.interceptor';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import für BrowserAnimationsModule
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
 
 if (environment) {
   enableProdMode();
@@ -16,7 +18,8 @@ if (environment) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(HttpClientModule, BrowserAnimationsModule), // HttpClientModule und BrowserAnimationsModule importieren
-    provideHttpClient(withInterceptors([correlationIdInterceptor])), // Interceptor registrieren
+    provideRouter(routes), // Routes bereitstellen
+    importProvidersFrom(HttpClientModule, BrowserAnimationsModule),
+    provideHttpClient(withInterceptors([correlationIdInterceptor])),
   ],
 }).catch((err) => console.error(err));
