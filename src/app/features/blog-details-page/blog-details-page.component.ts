@@ -1,35 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlogService } from '../../services/blog.service';
 import { Blog } from '../../interfaces/blog';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // RouterModule importieren
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-blog-details-page',
   standalone: true,
-  imports: [CommonModule, RouterModule], // RouterModule hier hinzufügen
+  imports: [CommonModule, RouterModule],
   templateUrl: './blog-details-page.component.html',
   styleUrls: ['./blog-details-page.component.scss'],
 })
 export class BlogDetailsPageComponent implements OnInit {
-  blog: Blog | undefined;
+  blog: Blog | null = null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private blogService: BlogService,
-  ) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    const blogId = this.route.snapshot.paramMap.get('id');
-    if (blogId) {
-      this.loadBlogDetails(Number(blogId));
-    }
-  }
-
-  loadBlogDetails(id: number): void {
-    this.blogService.getBlogDetails(id).subscribe((blog: Blog) => {
-      this.blog = blog;
-    });
+    // Zugriff auf die vom Resolver geladenen Blog-Daten
+    this.blog = this.route.snapshot.data['blog'];
   }
 }
