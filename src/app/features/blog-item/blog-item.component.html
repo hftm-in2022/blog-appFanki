@@ -1,0 +1,34 @@
+<mat-card class="blog-card">
+  <mat-card-header>
+    <mat-card-title>{{ blog.title }}</mat-card-title>
+    <mat-card-subtitle>Autor: {{ blog.author }}</mat-card-subtitle>
+  </mat-card-header>
+  <img
+    mat-card-image
+    *ngIf="blog.headerImageUrl"
+    [src]="blog.headerImageUrl"
+    alt="Blog Header Image"
+  />
+  <mat-card-content>
+    <p *ngIf="isDetailView; else previewContent">
+      {{ blog.contentPreview }}
+    </p>
+    <ng-template #previewContent>
+      <p>{{ blog.contentPreview }}</p>
+    </ng-template>
+
+    <div class="blog-info">
+      <p><strong>Likes:</strong> {{ blog.likes }}</p>
+      <p><strong>Kommentare:</strong> {{ blog.comments }}</p>
+    </div>
+
+    <!-- "Mehr lesen"-Button nur in der Übersicht anzeigen -->
+    <button
+      *ngIf="!isDetailView"
+      class="read-more-button"
+      [routerLink]="['/blog-details', blog.id]"
+    >
+      Mehr lesen
+    </button>
+  </mat-card-content>
+</mat-card>
