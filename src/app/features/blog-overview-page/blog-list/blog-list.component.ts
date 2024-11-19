@@ -1,11 +1,7 @@
-import {
-  Component,
-  WritableSignal,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Blog } from '../../../interfaces/blog';
 import { BlogItemComponent } from '../../blog-item/blog-item.component';
+import { StateStore } from '../../../state/state-store'; // Importiere den zentralen StateStore
 
 @Component({
   selector: 'app-blog-list',
@@ -16,9 +12,11 @@ import { BlogItemComponent } from '../../blog-item/blog-item.component';
   changeDetection: ChangeDetectionStrategy.OnPush, // OnPush Change Detection
 })
 export class BlogListComponent {
-  blogs: WritableSignal<Blog[]> = signal([]); // Signal für die Blogliste
+  store = inject(StateStore); // State-Store direkt verwenden
+  blogs = this.store.blogs; // Blogs aus dem zentralen Signal
 
-  setBlogs(blogList: Blog[]): void {
-    this.blogs.set(blogList); // Aktualisiert die Blogliste
+  // Optional: Methode zum Hinzufügen neuer Blogs (für zukünftige Funktionen)
+  addBlog(newBlog: Blog): void {
+    this.store.addBlog(newBlog);
   }
 }

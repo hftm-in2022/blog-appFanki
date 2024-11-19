@@ -144,6 +144,8 @@ Diese Umsetzung erfüllt alle Anforderungen und Best Practices für eine skalier
 
 ### Sprint 3 - State Management
 
+### Komponenten:
+
 #### **1. Kommunikation zwischen Komponenten mit Signals**
 
 - `@Input` und `@Output` wurden durch **Angular Signals** ersetzt, um eine moderne, reaktive Datenflussstrategie zu implementieren.
@@ -178,6 +180,44 @@ Diese Umsetzung erfüllt alle Anforderungen und Best Practices für eine skalier
 
 - Die `BlogItemComponent` ist als eigenständige, wiederverwendbare Komponente implementiert. Sie kann in unterschiedlichen Kontexten (z. B. Blogübersicht und
   Detailansicht) verwendet werden.
+
+  ### Redux-basiertes State-Management
+
+#### **1. Implementierung eines zentralen State-Stores**
+
+Ein zentraler State-Store (`StateStore`) wurde implementiert, der mithilfe von **Signals** und **RxJS** den Zustand der Anwendung verwaltet. Der Store bietet folgende Funktionen:
+
+- **Zentrales Management der Blogliste**:
+  - Die Blogliste wird durch ein `WritableSignal` verwaltet und kann von jeder Komponente gelesen werden.
+  - Änderungen an der Blogliste (z. B. Hinzufügen, Löschen) werden durch zentrale Methoden wie `addBlog`, `deleteBlog` oder `loadBlogs` vorgenommen.
+- **Redux-ähnliche Aktionen**:
+  - Mithilfe eines RxJS-Subjects (`actions$`) können Aktionen ausgelöst und überwacht werden.
+  - Beispiele: `LOAD_BLOGS`, `ADD_BLOG`, `DELETE_BLOG`, `FETCH_BLOGS_SUCCESS`, `FETCH_BLOGS_FAILURE`.
+
+#### **2. State-Management und API-Integration**
+
+Der State-Store kann Blogs direkt von einer externen API abrufen und in den zentralen Zustand laden.
+
+- Die Methode `fetchBlogs` ruft Daten von einer API ab und aktualisiert die Blogliste im Store.
+- Fehler werden geloggt, und Statusaktionen (`FETCH_BLOGS_SUCCESS`, `FETCH_BLOGS_FAILURE`) werden ausgelöst.
+
+#### **3. Verbindung der Komponenten mit dem Store**
+
+- **`BlogListComponent`**:
+  - Liest die Blogliste direkt aus dem Store.
+  - Reagiert automatisch auf Änderungen am Signal und aktualisiert die Ansicht ohne zusätzliche Logik.
+- **`BlogDetailsPageComponent`**:
+  - Liest die Blogdetails basierend auf der Blog-ID aus dem Store.
+
+#### **4. Performance-Optimierung**
+
+Alle betroffenen Komponenten verwenden die `ChangeDetectionStrategy.OnPush`, um unnötige DOM-Aktualisierungen zu vermeiden.
+
+---
+
+### **Zusammenfassung**
+
+Mit diesem Ansatz wurde ein zentralisierte
 
 ## Weiterführende Hilfe
 

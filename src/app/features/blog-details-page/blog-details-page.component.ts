@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Blog } from '../../interfaces/blog';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { StateStore } from '../../state/state-store';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-blog-details-page',
@@ -10,14 +9,10 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   templateUrl: './blog-details-page.component.html',
   styleUrls: ['./blog-details-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BlogDetailsPageComponent implements OnInit {
-  blog: Blog | null = null;
-
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    // Zugriff auf die vom Resolver geladenen Blog-Daten
-    this.blog = this.route.snapshot.data['blog'];
-  }
+export class BlogDetailsPageComponent {
+  store = inject(StateStore);
+  blogId = inject(ActivatedRoute).snapshot.params['id'];
+  blog = this.store.blogs().find((b) => b.id === this.blogId); // Blog aus zentralem State abrufen
 }
