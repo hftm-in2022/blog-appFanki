@@ -142,6 +142,43 @@ Das Deployment erfolgt automatisch bei jedem Push in den `main`-Branch. Die CI/C
 
 Diese Umsetzung erfüllt alle Anforderungen und Best Practices für eine skalierbare und benutzerfreundliche Blog-Anwendung mit Angular.
 
+### Sprint 3 - State Management
+
+#### **1. Kommunikation zwischen Komponenten mit Signals**
+
+- `@Input` und `@Output` wurden durch **Angular Signals** ersetzt, um eine moderne, reaktive Datenflussstrategie zu implementieren.
+- Die Datenübergabe erfolgt nun über Methoden, die Signale aktualisieren, wodurch die Kontrolle granularer und die Performance verbessert wird.
+
+#### **Betroffene Komponenten:**
+
+1. **`BlogItemComponent`**:
+   - `@Input()` wurde durch **WritableSignal** ersetzt.
+   - Methoden wie `setBlog` und `setIsDetailView` aktualisieren die Signale für Blogdaten und Detailansicht dynamisch.
+2. **`BlogListComponent`**:
+   - Die Blogliste (`blogs`) wird als **WritableSignal** definiert.
+   - Setter-Methoden wie `setBlogs` ermöglichen die Aktualisierung der Liste von Blogs ohne `@Input`.
+
+---
+
+#### **2. Performance-Optimierung durch OnPush Change Detection**
+
+- Alle betroffenen Komponenten verwenden die `ChangeDetectionStrategy.OnPush`, um unnötige DOM-Updates zu vermeiden.
+- Diese Strategie verbessert die Effizienz der Anwendung insbesondere bei größeren Datenmengen.
+
+---
+
+#### **3. Template-basierte Datenbindung**
+
+- Im Template von `BlogListComponent` wird mithilfe von Angular Directives wie `*ngFor` eine Liste von Blogs dynamisch gerendert.
+- Jeder Blog-Eintrag wird an `BlogItemComponent` übergeben, ohne `@Input` zu verwenden, sondern über direkte Methodenzugriffe auf die Komponente.
+
+---
+
+#### **4. Modularität und Wiederverwendbarkeit**
+
+- Die `BlogItemComponent` ist als eigenständige, wiederverwendbare Komponente implementiert. Sie kann in unterschiedlichen Kontexten (z. B. Blogübersicht und
+  Detailansicht) verwendet werden.
+
 ## Weiterführende Hilfe
 
 Für weitere Informationen zur Angular CLI kannst du die [Angular CLI-Dokumentation](https://angular.dev/tools/cli) besuchen.
