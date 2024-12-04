@@ -142,6 +142,83 @@ Das Deployment erfolgt automatisch bei jedem Push in den `main`-Branch. Die CI/C
 
 Diese Umsetzung erfüllt alle Anforderungen und Best Practices für eine skalierbare und benutzerfreundliche Blog-Anwendung mit Angular.
 
+### Sprint 3 - State Management
+
+### Komponenten:
+
+#### **1. Kommunikation zwischen Komponenten mit Signals**
+
+- `@Input` und `@Output` wurden durch **Angular Signals** ersetzt, um eine moderne, reaktive Datenflussstrategie zu implementieren.
+- Die Datenübergabe erfolgt nun über Methoden, die Signale aktualisieren, wodurch die Kontrolle granularer und die Performance verbessert wird.
+
+#### **Betroffene Komponenten:**
+
+1. **`BlogItemComponent`**:
+   - `@Input()` wurde durch **WritableSignal** ersetzt.
+   - Methoden wie `setBlog` und `setIsDetailView` aktualisieren die Signale für Blogdaten und Detailansicht dynamisch.
+2. **`BlogListComponent`**:
+   - Die Blogliste (`blogs`) wird als **WritableSignal** definiert.
+   - Setter-Methoden wie `setBlogs` ermöglichen die Aktualisierung der Liste von Blogs ohne `@Input`.
+
+---
+
+#### **2. Performance-Optimierung durch OnPush Change Detection**
+
+- Alle betroffenen Komponenten verwenden die `ChangeDetectionStrategy.OnPush`, um unnötige DOM-Updates zu vermeiden.
+- Diese Strategie verbessert die Effizienz der Anwendung insbesondere bei größeren Datenmengen.
+
+---
+
+#### **3. Template-basierte Datenbindung**
+
+- Im Template von `BlogListComponent` wird mithilfe von Angular Directives wie `*ngFor` eine Liste von Blogs dynamisch gerendert.
+- Jeder Blog-Eintrag wird an `BlogItemComponent` übergeben, ohne `@Input` zu verwenden, sondern über direkte Methodenzugriffe auf die Komponente.
+
+---
+
+#### **4. Modularität und Wiederverwendbarkeit**
+
+- Die `BlogItemComponent` ist als eigenständige, wiederverwendbare Komponente implementiert. Sie kann in unterschiedlichen Kontexten (z. B. Blogübersicht und
+  Detailansicht) verwendet werden.
+
+  ### Redux-basiertes State-Management
+
+#### **1. Implementierung eines zentralen State-Stores**
+
+Ein zentraler State-Store (`StateStore`) wurde implementiert, der mithilfe von **Signals** und **RxJS** den Zustand der Anwendung verwaltet. Der Store bietet folgende Funktionen:
+
+- **Zentrales Management der Blogliste**:
+  - Die Blogliste wird durch ein `WritableSignal` verwaltet und kann von jeder Komponente gelesen werden.
+  - Änderungen an der Blogliste (z. B. Hinzufügen, Löschen) werden durch zentrale Methoden wie `addBlog`, `deleteBlog` oder `loadBlogs` vorgenommen.
+- **Redux-ähnliche Aktionen**:
+  - Mithilfe eines RxJS-Subjects (`actions$`) können Aktionen ausgelöst und überwacht werden.
+  - Beispiele: `LOAD_BLOGS`, `ADD_BLOG`, `DELETE_BLOG`, `FETCH_BLOGS_SUCCESS`, `FETCH_BLOGS_FAILURE`.
+
+#### **2. State-Management und API-Integration**
+
+Der State-Store kann Blogs direkt von einer externen API abrufen und in den zentralen Zustand laden.
+
+- Die Methode `fetchBlogs` ruft Daten von einer API ab und aktualisiert die Blogliste im Store.
+- Fehler werden geloggt, und Statusaktionen (`FETCH_BLOGS_SUCCESS`, `FETCH_BLOGS_FAILURE`) werden ausgelöst.
+
+#### **3. Verbindung der Komponenten mit dem Store**
+
+- **`BlogListComponent`**:
+  - Liest die Blogliste direkt aus dem Store.
+  - Reagiert automatisch auf Änderungen am Signal und aktualisiert die Ansicht ohne zusätzliche Logik.
+- **`BlogDetailsPageComponent`**:
+  - Liest die Blogdetails basierend auf der Blog-ID aus dem Store.
+
+#### **4. Performance-Optimierung**
+
+Alle betroffenen Komponenten verwenden die `ChangeDetectionStrategy.OnPush`, um unnötige DOM-Aktualisierungen zu vermeiden.
+
+---
+
+### **Zusammenfassung**
+
+Mit diesem Ansatz wurde ein zentralisierte
+
 ## Weiterführende Hilfe
 
 Für weitere Informationen zur Angular CLI kannst du die [Angular CLI-Dokumentation](https://angular.dev/tools/cli) besuchen.
