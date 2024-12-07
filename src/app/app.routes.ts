@@ -19,4 +19,11 @@ export const routes: Routes = [
       blog: BlogDetailResolver, // BlogDetailResolver zum Laden der Blog-Daten vor dem Navigieren
     },
   },
+  {
+    path: 'add-blog',
+    loadChildren: () =>
+      import('./features/add-blog-page/add-blog-page.module').then(
+        (m) => m.AddBlogPageModule,
+      ),
+  },
 ];
