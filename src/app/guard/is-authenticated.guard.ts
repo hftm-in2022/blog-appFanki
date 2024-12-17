@@ -1,22 +1,23 @@
 import { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { hasRole } from '../helpers/has-role.helper';
 import { map } from 'rxjs';
-import { IdTokenPayload } from '../interfaces/idTokenPayLoad'; // Pfad zum Interface anpassen
 
 export const isAuthenticatedGuard: CanActivateFn = () => {
   const oidcSecurityService = inject(OidcSecurityService);
 
   return oidcSecurityService.isAuthenticated$.pipe(
     map((isAuthenticated) => {
-      if (!isAuthenticated) return false; // Nicht eingeloggt
+      if (!isAuthenticated) return false; // Benutzer nicht eingeloggt
 
-      // Payload sicher casten
-      const payload =
-        oidcSecurityService.getPayloadFromIdToken() as IdTokenPayload | null;
+      // Extrahiere Rollen aus dem Token
+      const payload = oidcSecurityService.getPayloadFromIdToken() as {
+        roles?: string[];
+      };
 
-      // Prüfen, ob die Rolle 'user' vorhanden ist
-      return !!payload?.roles?.includes('user');
+      // Prüfe, ob der Benutzer die Rolle 'user' hat
+      return hasRole(payload?.roles, 'user');
     }),
   );
 };
