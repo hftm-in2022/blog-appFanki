@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { BlogDetailResolver } from './resolvers/blog-detail.resolver';
+import { isAuthenticatedGuard } from './guard/is-authenticated.guard';
 
 export const routes: Routes = [
   {
@@ -25,5 +26,6 @@ export const routes: Routes = [
       import('./features/add-blog-page/add-blog-page.module').then(
         (m) => m.AddBlogPageModule,
       ),
+    canActivate: [isAuthenticatedGuard], // Guard hinzufügen
   },
 ];
