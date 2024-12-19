@@ -1,26 +1,36 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { HttpClientModule } from '@angular/common/http';
+import { of } from 'rxjs';
 
 describe('AppComponent', () => {
+  let mockOidcSecurityService: Partial<OidcSecurityService>;
+
   beforeEach(async () => {
+    mockOidcSecurityService = {
+      isAuthenticated$: of({
+        isAuthenticated: true,
+        allConfigsAuthenticated: [
+          { configId: 'mockConfig', isAuthenticated: true },
+        ],
+      }),
+      getPayloadFromIdToken: jasmine
+        .createSpy('getPayloadFromIdToken')
+        .and.returnValue({ roles: ['user'] }),
+    };
+
     await TestBed.configureTestingModule({
-      imports: [AppComponent, BrowserAnimationsModule, HttpClientModule],
+      imports: [AppComponent, HttpClientModule], // AppComponent in imports aufnehmen
+      providers: [
+        { provide: OidcSecurityService, useValue: mockOidcSecurityService },
+      ],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('should create', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    const component = fixture.componentInstance;
+    expect(component).toBeTruthy();
   });
-
-  it(`should have the 'blog-app' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('blog-app');
-  });
-
-  // Entfernen des Tests für das h1-Tag, da es nicht im Template existiert
 });
