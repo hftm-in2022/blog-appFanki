@@ -1,0 +1,15 @@
+<header>
+  <h1>Blog-App</h1>
+  <nav>
+    <button *ngIf="!isAuthenticated" (click)="login()">Login</button>
+    <button *ngIf="isAuthenticated" (click)="logout()">
+      Logout ({{ userName }})
+    </button>
+    <button
+      *ngIf="isAuthenticated && userRoles?.includes('user')"
+      routerLink="/add-blog"
+    >
+      Neuen Blog erstellen
+    </button>
+  </nav>
+</header>

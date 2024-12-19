@@ -1,60 +1,31 @@
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { DemoComponent } from '../../demo/demo.component';
 import { Blog } from '../../interfaces/blog';
 import { BlogService } from '../../services/blog.service';
-import { RouterModule } from '@angular/router'; // RouterModule importieren
+import { CommonModule, DatePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog-overview-page',
   standalone: true,
-  imports: [
-    DemoComponent,
-    CommonModule,
-    HttpClientModule,
-    FormsModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    RouterModule, // Hier RouterModule hinzufügen
-  ],
+  imports: [CommonModule, RouterModule, MatProgressSpinnerModule, DatePipe],
   templateUrl: './blog-overview-page.component.html',
   styleUrls: ['./blog-overview-page.component.scss'],
 })
 export class BlogOverviewPageComponent implements OnInit {
   blogs: Blog[] = [];
-  displayedBlogs: Blog[] = [];
+  blogRows: Blog[][] = [];
   currentIndex = 0;
-  maxBlogs = 3;
+  maxBlogs = 9; // Zeige bis zu 9 Blogs pro Ladung an
+  blogsPerRow = 3;
   isLoading = true;
-  selectedBlog: Blog | null = null;
-  isCreatingNewBlog = false;
-  isEditingBlog = false;
-  newBlog: Blog = {
-    id: 0,
-    title: '',
-    author: '',
-    contentPreview: '',
-    likes: 0,
-    comments: 0,
-    headerImageUrl: '',
-    updatedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    likedByMe: false,
-    createdByMe: true,
-  };
-  title = 'Blog';
+  title = 'BlogApp';
 
-  constructor(private blogService: BlogService) {}
+  constructor(
+    private blogService: BlogService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.blogService.getBlogs().subscribe(
@@ -71,81 +42,19 @@ export class BlogOverviewPageComponent implements OnInit {
   }
 
   updateDisplayedBlogs(): void {
-    this.displayedBlogs = this.blogs.slice(
-      this.currentIndex,
-      this.currentIndex + this.maxBlogs,
-    );
-  }
-
-  prevBlog(): void {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-      this.updateDisplayedBlogs();
+    const displayed = this.blogs.slice(0, this.currentIndex + this.maxBlogs);
+    this.blogRows = [];
+    for (let i = 0; i < displayed.length; i += this.blogsPerRow) {
+      this.blogRows.push(displayed.slice(i, i + this.blogsPerRow));
     }
   }
 
-  nextBlog(): void {
-    if (this.currentIndex + this.maxBlogs < this.blogs.length) {
-      this.currentIndex++;
-      this.updateDisplayedBlogs();
-    }
-  }
-
-  viewDetails(blogId: number): void {
-    this.selectedBlog = this.blogs.find((blog) => blog.id === blogId) || null;
-    this.isEditingBlog = false;
-  }
-
-  closeDetails(): void {
-    this.selectedBlog = null;
-    this.isEditingBlog = false;
-  }
-
-  toggleLike(blog: Blog): void {
-    blog.likes += blog.likedByMe ? -1 : 1;
-    blog.likedByMe = !blog.likedByMe;
-    this.blogService
-      .updateLikeInfo(blog.id, { likedByMe: blog.likedByMe })
-      .subscribe();
-  }
-
-  startCreatingNewBlog(): void {
-    this.isCreatingNewBlog = true;
-    this.selectedBlog = null;
-  }
-
-  saveNewBlog(): void {
-    this.blogs.push({ ...this.newBlog, id: this.blogs.length + 1 });
-    this.isCreatingNewBlog = false;
-    this.newBlog = {
-      id: 0,
-      title: '',
-      author: '',
-      contentPreview: '',
-      likes: 0,
-      comments: 0,
-      headerImageUrl: '',
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      likedByMe: false,
-      createdByMe: true,
-    };
+  loadMoreBlogs(): void {
+    this.currentIndex += this.maxBlogs;
     this.updateDisplayedBlogs();
   }
 
-  startEditingBlog(): void {
-    this.isEditingBlog = true;
-  }
-
-  saveEditedBlog(): void {
-    if (this.selectedBlog) {
-      const index = this.blogs.findIndex(
-        (blog) => blog.id === this.selectedBlog!.id,
-      );
-      if (index !== -1) {
-        this.blogs[index] = this.selectedBlog;
-        this.isEditingBlog = false;
-      }
-    }
+  navigateToDetails(blogId: number): void {
+    this.router.navigate(['/blog-details', blogId]);
   }
 }

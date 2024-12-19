@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { HeaderComponent } from './header.component';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { HttpClientModule } from '@angular/common/http';
 import { of } from 'rxjs';
 
-describe('AppComponent', () => {
+describe('HeaderComponent', () => {
   let mockOidcSecurityService: Partial<OidcSecurityService>;
 
   beforeEach(async () => {
@@ -17,11 +17,11 @@ describe('AppComponent', () => {
       }),
       getPayloadFromIdToken: jasmine
         .createSpy('getPayloadFromIdToken')
-        .and.returnValue({ roles: ['user'] }),
+        .and.returnValue({ roles: ['user'], preferred_username: 'testUser' }),
     };
 
     await TestBed.configureTestingModule({
-      imports: [AppComponent, HttpClientModule], // AppComponent in imports aufnehmen
+      imports: [HeaderComponent, HttpClientModule], // HttpClientModule hinzugefügt
       providers: [
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
       ],
@@ -29,7 +29,7 @@ describe('AppComponent', () => {
   });
 
   it('should create', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.createComponent(HeaderComponent);
     const component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

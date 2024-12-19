@@ -1,18 +1,5 @@
 <h1 class="page-title">{{ title }}</h1>
 
-<!-- Button zum Erstellen eines neuen Blogs -->
-<div class="create-blog-button">
-  <button
-    class="new-blog-button"
-    mat-raised-button
-    color="primary"
-    (click)="startCreatingNewBlog()"
-    aria-label="Neuen Blog erstellen"
-  >
-    Neuer Blog
-  </button>
-</div>
-
 <!-- Nachricht anzeigen, wenn keine Blogs verfügbar sind -->
 <div *ngIf="blogs.length === 0 && !isLoading" class="no-blogs">
   <p>Keine Blogs verfügbar.</p>
@@ -21,53 +8,47 @@
 <!-- Ladeindikator -->
 <mat-spinner *ngIf="isLoading" diameter="40"></mat-spinner>
 
-<!-- Navigationspfeile -->
-<div class="blog-navigation" *ngIf="blogs.length > 0 && !isLoading">
-  <button
-    class="nav-button"
-    mat-icon-button
-    (click)="prevBlog()"
-    [disabled]="currentIndex === 0"
-    aria-label="Vorheriger Blog"
-  >
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-
-  <!-- Blogkarten -->
-  <div class="blog-container">
-    <div class="blog-card" *ngFor="let blog of displayedBlogs">
+<!-- Blogkarten -->
+<div class="blog-container">
+  <div class="blog-row" *ngFor="let row of blogRows">
+    <div
+      class="blog-card"
+      *ngFor="let blog of row"
+      (click)="navigateToDetails(blog.id)"
+      tabindex="0"
+      (keyup.enter)="navigateToDetails(blog.id)"
+      role="button"
+      aria-label="Öffne Blogdetails"
+    >
       <img
         class="blog-image"
         [src]="blog.headerImageUrl"
         alt="Header Image"
         *ngIf="blog.headerImageUrl"
       />
-
       <div class="blog-content">
-        <span class="blog-tag">{{ blog.author }}</span>
+        <span class="blog-author">{{ blog.author }}</span>
         <h2 class="blog-title">{{ blog.title }}</h2>
         <p class="blog-preview">{{ blog.contentPreview }}</p>
         <div class="blog-info">
-          <p><strong>Likes:</strong> {{ blog.likes }}</p>
-          <p><strong>Kommentare:</strong> {{ blog.comments }}</p>
+          <p>
+            <strong>{{ blog.updatedAt | date: "short" }}</strong>
+          </p>
         </div>
-        <button
-          class="read-more-button"
-          [routerLink]="['/blog-details', blog.id]"
-        >
-          Mehr lesen
-        </button>
       </div>
     </div>
   </div>
+</div>
 
+<!-- Button zum Laden weiterer Blogs -->
+<div class="load-more">
   <button
-    class="nav-button"
-    mat-icon-button
-    (click)="nextBlog()"
+    class="load-more-button"
+    mat-raised-button
+    color="primary"
+    (click)="loadMoreBlogs()"
     [disabled]="currentIndex + maxBlogs >= blogs.length"
-    aria-label="Nächster Blog"
   >
-    <mat-icon>chevron_right</mat-icon>
+    Mehr laden
   </button>
 </div>
