@@ -15,11 +15,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/blog-app",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -28,8 +28,11 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
-              }
+                "input": "public",
+                "output": "/"
+              },
+              "src/silent-renew.html", 
+              "src/assets" 
             ],
             "styles": [
               "src/styles.scss"
@@ -93,8 +96,11 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
-              }
+                "input": "public",
+                "output": "/"
+              },
+              "src/silent-renew.html", 
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
@@ -115,7 +121,7 @@
     }
   },
   "cli": {
-    "analytics": "177ac545-495c-44a5-ac66-fea1b967febc",
+    "analytics": false,
     "schematicCollections": [
       "@angular-eslint/schematics"
     ]
