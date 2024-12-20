@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { BlogDetailResolver } from './resolvers/blog-detail.resolver';
-import { isAuthenticatedGuard } from './guard/is-authenticated.guard';
+//import { isAuthenticatedGuard } from './guard/is-authenticated.guard';
 import { LoginPageComponent } from './features/login-page/login-page.component';
 import { BlogOverviewPageComponent } from './features/blog-overview-page/blog-overview-page.component';
 import { RegisterPageComponent } from './features/register-page/register-page.component';
@@ -30,7 +30,7 @@ export const routes: Routes = [
       import('./features/add-blog-page/add-blog-page.module').then(
         (m) => m.AddBlogPageModule,
       ),
-    canActivate: [isAuthenticatedGuard], // Guard hinzufügen
+    //canActivate: [isAuthenticatedGuard], // Guard für Authentifizierung
   },
   {
     path: 'register',

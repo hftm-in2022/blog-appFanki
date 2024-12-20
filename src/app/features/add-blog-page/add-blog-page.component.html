@@ -1,0 +1,53 @@
+<form [formGroup]="blogForm" (ngSubmit)="onSubmit()" class="blog-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Title*</mat-label>
+    <input
+      matInput
+      formControlName="title"
+      placeholder="Enter the blog title"
+    />
+    <mat-error *ngIf="blogForm.get('title')?.hasError('required')">
+      Title is required.
+    </mat-error>
+    <mat-error *ngIf="blogForm.get('title')?.hasError('minlength')">
+      Title must be at least 5 characters long.
+    </mat-error>
+    <mat-error *ngIf="blogForm.get('title')?.hasError('titleExists')">
+      This title already exists. Please choose another.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Content*</mat-label>
+    <textarea
+      matInput
+      formControlName="content"
+      placeholder="Write your blog content"
+    ></textarea>
+    <mat-error *ngIf="blogForm.get('content')?.hasError('required')">
+      Content is required.
+    </mat-error>
+  </mat-form-field>
+
+  <div class="form-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="blogForm.invalid || isSubmitting"
+    >
+      {{ isSubmitting ? "Saving..." : "Save Blog" }}
+    </button>
+    <button mat-raised-button color="warn" type="button" (click)="onReset()">
+      Reset
+    </button>
+    <button
+      mat-raised-button
+      color="accent"
+      type="button"
+      (click)="goBackToBlogs()"
+    >
+      Back to Blogs
+    </button>
+  </div>
+</form>

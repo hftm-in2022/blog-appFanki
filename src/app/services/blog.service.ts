@@ -64,4 +64,11 @@ export class BlogService {
   ): Observable<Blog> {
     return this.http.patch<Blog>(`${this.apiUrl}/entries/${id}`, updateData);
   }
+
+  // Prüfen, ob ein Titel bereits existiert
+  checkTitleExists(title: string): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.apiUrl}/entries/title-exists?title=${title}`,
+    );
+  }
 }

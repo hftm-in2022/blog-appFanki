@@ -18,7 +18,8 @@ import { routes } from './app/app.routes';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GlobalErrorHandlerService } from './app/services/global-error.service';
 import { provideAuth } from 'angular-auth-oidc-client'; // Neuer Import für die Authentifizierung
-import { authConfig } from './app/auth/auth.config'; // Import der neuen Authentifizierungskonfiguration
+import { authConfig } from './app/auth/auth.config';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'; // Import der neuen Authentifizierungskonfiguration
 
 if (environment) {
   enableProdMode();
@@ -34,6 +35,8 @@ bootstrapApplication(AppComponent, {
     ),
     provideHttpClient(withInterceptors([correlationIdInterceptor])), // HTTP-Interceptor hinzufügen
     provideAuth(authConfig), // Neue Authentifizierungskonfiguration
-    { provide: ErrorHandler, useClass: GlobalErrorHandlerService }, // Globaler Error-Handler
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
+    provideAnimationsAsync(),
+    provideAnimationsAsync(), // Globaler Error-Handler
   ],
 }).catch((err) => console.error('Application bootstrapping failed:', err));

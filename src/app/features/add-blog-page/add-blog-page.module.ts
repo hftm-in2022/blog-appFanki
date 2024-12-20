@@ -1,12 +1,29 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AddBlogPageComponent } from './add-blog-page.component';
+import { ReactiveFormsModule } from '@angular/forms'; // Für die Formularfunktionalität
+import { CommonModule } from '@angular/common'; // Für grundlegende Angular-Direktiven
+import { MatFormFieldModule } from '@angular/material/form-field'; // Für Material FormField
+import { MatInputModule } from '@angular/material/input'; // Für Material Input
+import { MatButtonModule } from '@angular/material/button'; // Für Buttons
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // Für den Ladeindikator
+import { AddBlogPageComponent } from './add-blog-page.component'; // Import der Standalone-Komponente
 
-const routes: Routes = [{ path: '', component: AddBlogPageComponent }];
+const routes: Routes = [
+  {
+    path: '',
+    component: AddBlogPageComponent, // Direkt zuweisen
+  },
+];
 
 @NgModule({
-  declarations: [AddBlogPageComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes), // Lazy Loading
+    ReactiveFormsModule, // Für Formulare
+    MatFormFieldModule, // Angular Material FormField
+    MatInputModule, // Angular Material Input
+    MatButtonModule, // Angular Material Buttons
+    MatProgressSpinnerModule, // Angular Material Spinner
+  ],
 })
 export class AddBlogPageModule {}
