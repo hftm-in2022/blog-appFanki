@@ -33,15 +33,11 @@ export class BlogService {
     );
   }
 
-  // Like-Informationen aktualisieren
   updateLikeInfo(
-    id: number,
-    likeInfo: { likedByMe: boolean },
+    blogId: number,
+    likeData: { likes: number; likedByMe: boolean },
   ): Observable<void> {
-    return this.http.put<void>(
-      `${this.apiUrl}/entries/${id}/like-info`,
-      likeInfo,
-    );
+    return this.http.patch<void>(`/api/blogs/${blogId}/like`, likeData);
   }
 
   // Neuen Blog-Eintrag erstellen

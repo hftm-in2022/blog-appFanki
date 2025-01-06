@@ -61,6 +61,21 @@
   color: #555;
 }
 
+.blog-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.blog-actions button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
 .load-more {
   display: flex;
   justify-content: center;

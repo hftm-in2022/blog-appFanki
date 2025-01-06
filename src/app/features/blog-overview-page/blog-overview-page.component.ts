@@ -4,12 +4,23 @@ import { BlogService } from '../../services/blog.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { BlogListComponent } from './blog-list/blog-list.component';
 
 @Component({
   selector: 'app-blog-overview-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatProgressSpinnerModule, DatePipe],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatButtonModule,
+    DatePipe,
+    BlogListComponent,
+  ],
   templateUrl: './blog-overview-page.component.html',
   styleUrls: ['./blog-overview-page.component.scss'],
 })
@@ -56,5 +67,35 @@ export class BlogOverviewPageComponent implements OnInit {
 
   navigateToDetails(blogId: number): void {
     this.router.navigate(['/blog-details', blogId]);
+  }
+
+  onLike(blog: Blog): void {
+    if (!blog.likedByMe) {
+      blog.likes += 1; // Erhöhe die Likes, wenn der Benutzer noch nicht geliked hat.
+      blog.likedByMe = true; // Markiere, dass der Benutzer den Blog geliked hat.
+
+      console.log(`Blog ${blog.id} geliked!`);
+
+      // API-Aufruf zur Aktualisierung des Likes
+      this.blogService
+        .updateLikeInfo(blog.id, {
+          likes: blog.likes,
+          likedByMe: blog.likedByMe,
+        })
+        .subscribe(
+          () => console.log('Like erfolgreich aktualisiert!'),
+          (error) =>
+            console.error('Fehler beim Aktualisieren des Likes:', error),
+        );
+    } else {
+      console.log(`Blog ${blog.id} wurde bereits geliked.`);
+    }
+  }
+
+  onShare(blog: Blog): void {
+    const shareUrl = `${window.location.origin}/blog-details/${blog.id}`;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert('Link zum Blog wurde kopiert!');
+    });
   }
 }

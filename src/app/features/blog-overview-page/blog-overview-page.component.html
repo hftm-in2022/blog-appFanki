@@ -8,37 +8,8 @@
 <!-- Ladeindikator -->
 <mat-spinner *ngIf="isLoading" diameter="40"></mat-spinner>
 
-<!-- Blogkarten -->
-<div class="blog-container">
-  <div class="blog-row" *ngFor="let row of blogRows">
-    <div
-      class="blog-card"
-      *ngFor="let blog of row"
-      (click)="navigateToDetails(blog.id)"
-      tabindex="0"
-      (keyup.enter)="navigateToDetails(blog.id)"
-      role="button"
-      aria-label="Öffne Blogdetails"
-    >
-      <img
-        class="blog-image"
-        [src]="blog.headerImageUrl"
-        alt="Header Image"
-        *ngIf="blog.headerImageUrl"
-      />
-      <div class="blog-content">
-        <span class="blog-author">{{ blog.author }}</span>
-        <h2 class="blog-title">{{ blog.title }}</h2>
-        <p class="blog-preview">{{ blog.contentPreview }}</p>
-        <div class="blog-info">
-          <p>
-            <strong>{{ blog.updatedAt | date: "short" }}</strong>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Blog-Liste -->
+<app-blog-list [blogs]="blogs"></app-blog-list>
 
 <!-- Button zum Laden weiterer Blogs -->
 <div class="load-more">
