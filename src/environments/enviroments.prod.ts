@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   backendUrl:
     'https://d-cap-blog-backend.whitepond-b96fee4b.westeurope.azurecontainerapps.io',
   authUrl:

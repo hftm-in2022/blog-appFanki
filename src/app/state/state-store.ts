@@ -18,6 +18,7 @@ export class StateStore {
   private actions$ = new Subject<string>();
 
   constructor(private http: HttpClient) {
+    this.fetchBlogs(); // Blogs direkt beim Initialisieren laden
     this.observeActions(); // Aktionen automatisch überwachen
   }
 
@@ -64,16 +65,24 @@ export class StateStore {
   getActions(): Observable<string> {
     return this.actions$.asObservable();
   }
+
+  // Blogs asynchron vom Backend laden
   fetchBlogs(): void {
-    this.http.get<Blog[]>('https://example.com/api/blogs').subscribe(
-      (blogs) => {
-        this.blogsSignal.set(blogs);
-        this.dispatchAction('FETCH_BLOGS_SUCCESS');
-      },
-      (error) => {
-        console.error('Failed to fetch blogs:', error);
-        this.dispatchAction('FETCH_BLOGS_FAILURE');
-      },
-    );
+    console.log('Fetching blogs...');
+    this.http
+      .get<
+        Blog[]
+      >('https://d-cap-blog-backend---v2.whitepond-b96fee4b.westeurope.azurecontainerapps.io')
+      .subscribe(
+        (blogs) => {
+          console.log('Blogs fetched:', blogs);
+          this.blogsSignal.set(blogs);
+          this.dispatchAction('FETCH_BLOGS_SUCCESS');
+        },
+        (error) => {
+          console.error('Failed to fetch blogs:', error);
+          this.dispatchAction('FETCH_BLOGS_FAILURE');
+        },
+      );
   }
 }
