@@ -40,8 +40,9 @@ export class BlogOverviewPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.blogService.getBlogs().subscribe(
-      (response) => {
-        this.blogs = response.data;
+      (response: Blog[]) => {
+        console.log('Blogs loaded:', response);
+        this.blogs = response; // Direktes Zuweisen, da `response` bereits ein Blog-Array ist
         this.updateDisplayedBlogs();
         this.isLoading = false;
       },
@@ -77,16 +78,10 @@ export class BlogOverviewPageComponent implements OnInit {
       console.log(`Blog ${blog.id} geliked!`);
 
       // API-Aufruf zur Aktualisierung des Likes
-      this.blogService
-        .updateLikeInfo(blog.id, {
-          likes: blog.likes,
-          likedByMe: blog.likedByMe,
-        })
-        .subscribe(
-          () => console.log('Like erfolgreich aktualisiert!'),
-          (error) =>
-            console.error('Fehler beim Aktualisieren des Likes:', error),
-        );
+      this.blogService.updateBlog({ ...blog }).subscribe(
+        () => console.log('Like erfolgreich aktualisiert!'),
+        (error) => console.error('Fehler beim Aktualisieren des Likes:', error),
+      );
     } else {
       console.log(`Blog ${blog.id} wurde bereits geliked.`);
     }

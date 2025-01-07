@@ -16,7 +16,8 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<T>,
     next: HttpHandler,
   ): Observable<HttpEvent<T>> {
-    const token = this.oidcSecurityService.getIdToken(); // Hole den Access Token
+    const token = this.oidcSecurityService.getAccessToken(); // Hole den Access Token
+
     if (token) {
       const clonedRequest = req.clone({
         setHeaders: {
@@ -25,6 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
       });
       return next.handle(clonedRequest);
     }
+
     return next.handle(req);
   }
 }

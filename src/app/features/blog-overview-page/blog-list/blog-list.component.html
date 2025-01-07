@@ -1,3 +1,27 @@
 <div class="blog-list">
-  <app-blog-item *ngFor="let blog of blogs" [blog]="blog"> </app-blog-item>
+  <div class="blog-card" *ngFor="let blog of blogs">
+    <img
+      [src]="blog.headerImageUrl"
+      alt="Blog image"
+      class="blog-card__image"
+    />
+    <div class="blog-card__content">
+      <h2 class="blog-card__title">{{ blog.title }}</h2>
+      <p class="blog-card__author">Autor: {{ blog.author }}</p>
+      <p class="blog-card__preview">{{ blog.contentPreview }}</p>
+      <div class="blog-card__actions">
+        <button mat-button color="primary" (click)="navigateToDetails(blog.id)">
+          Mehr lesen
+        </button>
+        <button mat-icon-button color="warn" (click)="onLike(blog)">
+          <mat-icon>{{
+            blog.likedByMe ? "favorite" : "favorite_border"
+          }}</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" (click)="onShare(blog)">
+          <mat-icon>share</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

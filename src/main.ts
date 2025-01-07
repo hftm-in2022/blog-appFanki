@@ -18,7 +18,7 @@ import { routes } from './app/app.routes';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GlobalErrorHandlerService } from './app/services/global-error.service';
 import { provideAuth } from 'angular-auth-oidc-client'; // Neuer Import für die Authentifizierung
-import { authConfig, authProviders } from './app/auth/auth.config'; // Neuer Import für die Authentifizierung
+import { authConfig } from './app/auth/auth.config'; // Neuer Import für die Authentifizierung
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'; // Import der neuen Authentifizierungskonfiguration
 
 if (environment.production) {
@@ -35,7 +35,6 @@ bootstrapApplication(AppComponent, {
     ),
     provideHttpClient(withInterceptors([correlationIdInterceptor])), // HTTP-Interceptor hinzufügen
     provideAuth({ config: authConfig }), // Authentifizierungskonfiguration übergeben
-    ...authProviders, // Zusätzliche Authentifizierungsanbieter
     { provide: ErrorHandler, useClass: GlobalErrorHandlerService }, // Globaler Error-Handler
     provideAnimationsAsync(), // Animationen
   ],
