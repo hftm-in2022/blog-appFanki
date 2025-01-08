@@ -9,7 +9,12 @@
 <mat-spinner *ngIf="isLoading" diameter="40"></mat-spinner>
 
 <!-- Blog-Liste -->
-<app-blog-list [blogs]="displayedBlogs"></app-blog-list>
+<app-blog-list
+  [blogs]="blogs"
+  [navigateToDetails]="navigateToDetails"
+  [onLike]="onLike"
+  [onShare]="onShare"
+></app-blog-list>
 
 <!-- Button zum Laden weiterer Blogs -->
 <div
