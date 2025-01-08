@@ -2,11 +2,12 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Blog } from '../../../interfaces/blog';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-blog-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatCardModule],
   templateUrl: './blog-list.component.html',
   styleUrls: ['./blog-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush, // OnPush Change Detection

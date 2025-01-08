@@ -1,27 +1,39 @@
 <div class="blog-list">
-  <div class="blog-card" *ngFor="let blog of blogs">
+  <mat-card class="blog-card" *ngFor="let blog of blogs">
+    <mat-card-header>
+      <mat-card-title>{{ blog.title }}</mat-card-title>
+      <mat-card-subtitle>Autor: {{ blog.author }}</mat-card-subtitle>
+    </mat-card-header>
     <img
+      mat-card-image
+      *ngIf="blog.headerImageUrl"
       [src]="blog.headerImageUrl"
-      alt="Blog image"
+      alt="Blog Header Image"
       class="blog-card__image"
     />
-    <div class="blog-card__content">
-      <h2 class="blog-card__title">{{ blog.title }}</h2>
-      <p class="blog-card__author">Autor: {{ blog.author }}</p>
-      <p class="blog-card__preview">{{ blog.contentPreview }}</p>
-      <div class="blog-card__actions">
-        <button mat-button color="primary" (click)="navigateToDetails(blog.id)">
-          Mehr lesen
-        </button>
-        <button mat-icon-button color="warn" (click)="onLike(blog)">
-          <mat-icon>{{
-            blog.likedByMe ? "favorite" : "favorite_border"
-          }}</mat-icon>
-        </button>
-        <button mat-icon-button color="accent" (click)="onShare(blog)">
-          <mat-icon>share</mat-icon>
-        </button>
+    <mat-card-content>
+      <p class="blog-preview">{{ blog.contentPreview }}</p>
+      <div class="blog-info">
+        <p><strong>Likes:</strong> {{ blog.likes }}</p>
+        <p><strong>Kommentare:</strong> {{ blog.comments }}</p>
       </div>
-    </div>
-  </div>
+    </mat-card-content>
+    <mat-card-actions class="blog-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="navigateToDetails(blog.id)"
+      >
+        Mehr lesen
+      </button>
+      <button mat-icon-button color="warn" (click)="onLike(blog)">
+        <mat-icon>{{
+          blog.likedByMe ? "favorite" : "favorite_border"
+        }}</mat-icon>
+      </button>
+      <button mat-icon-button color="accent" (click)="onShare(blog)">
+        <mat-icon>share</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>

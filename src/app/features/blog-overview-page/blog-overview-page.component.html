@@ -1,7 +1,7 @@
 <h1 class="page-title">{{ title }}</h1>
 
 <!-- Nachricht anzeigen, wenn keine Blogs verfügbar sind -->
-<div *ngIf="blogs.length === 0 && !isLoading" class="no-blogs">
+<div *ngIf="displayedBlogs.length === 0 && !isLoading" class="no-blogs">
   <p>Keine Blogs verfügbar.</p>
 </div>
 
@@ -9,16 +9,18 @@
 <mat-spinner *ngIf="isLoading" diameter="40"></mat-spinner>
 
 <!-- Blog-Liste -->
-<app-blog-list [blogs]="blogs"></app-blog-list>
+<app-blog-list [blogs]="displayedBlogs"></app-blog-list>
 
 <!-- Button zum Laden weiterer Blogs -->
-<div class="load-more">
+<div
+  class="load-more"
+  *ngIf="!isLoading && displayedBlogs.length < blogs.length"
+>
   <button
     class="load-more-button"
     mat-raised-button
     color="primary"
     (click)="loadMoreBlogs()"
-    [disabled]="currentIndex + maxBlogs >= blogs.length"
   >
     Mehr laden
   </button>

@@ -25,11 +25,10 @@ import { BlogListComponent } from './blog-list/blog-list.component';
   styleUrls: ['./blog-overview-page.component.scss'],
 })
 export class BlogOverviewPageComponent implements OnInit {
-  blogs: Blog[] = [];
-  blogRows: Blog[][] = [];
+  blogs: Blog[] = []; // Gesamte Blog-Liste
+  displayedBlogs: Blog[] = []; // Aktuell angezeigte Blogs
   currentIndex = 0;
   maxBlogs = 9; // Zeige bis zu 9 Blogs pro Ladung an
-  blogsPerRow = 3;
   isLoading = true;
   title = 'BlogApp';
 
@@ -39,10 +38,15 @@ export class BlogOverviewPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadBlogs();
+  }
+
+  // Lädt Blogs aus der API
+  private loadBlogs(): void {
     this.blogService.getBlogs().subscribe(
       (response: Blog[]) => {
         console.log('Blogs loaded:', response);
-        this.blogs = response; // Direktes Zuweisen, da `response` bereits ein Blog-Array ist
+        this.blogs = response;
         this.updateDisplayedBlogs();
         this.isLoading = false;
       },
@@ -53,40 +57,42 @@ export class BlogOverviewPageComponent implements OnInit {
     );
   }
 
+  // Aktualisiert die angezeigten Blogs basierend auf der aktuellen Seite
   updateDisplayedBlogs(): void {
-    const displayed = this.blogs.slice(0, this.currentIndex + this.maxBlogs);
-    this.blogRows = [];
-    for (let i = 0; i < displayed.length; i += this.blogsPerRow) {
-      this.blogRows.push(displayed.slice(i, i + this.blogsPerRow));
-    }
+    const nextBlogs = this.blogs.slice(
+      this.currentIndex,
+      this.currentIndex + this.maxBlogs,
+    );
+    this.displayedBlogs = [...this.displayedBlogs, ...nextBlogs]; // Neue Blogs zur angezeigten Liste hinzufügen
   }
 
+  // Lädt mehr Blogs
   loadMoreBlogs(): void {
     this.currentIndex += this.maxBlogs;
     this.updateDisplayedBlogs();
   }
 
+  // Navigiert zur Detailseite eines Blogs
   navigateToDetails(blogId: number): void {
     this.router.navigate(['/blog-details', blogId]);
   }
 
+  // Liked einen Blog
   onLike(blog: Blog): void {
     if (!blog.likedByMe) {
-      blog.likes += 1; // Erhöhe die Likes, wenn der Benutzer noch nicht geliked hat.
-      blog.likedByMe = true; // Markiere, dass der Benutzer den Blog geliked hat.
+      blog.likes++;
+      blog.likedByMe = true;
 
-      console.log(`Blog ${blog.id} geliked!`);
-
-      // API-Aufruf zur Aktualisierung des Likes
       this.blogService.updateBlog({ ...blog }).subscribe(
-        () => console.log('Like erfolgreich aktualisiert!'),
-        (error) => console.error('Fehler beim Aktualisieren des Likes:', error),
+        () => console.log(`Blog ${blog.id} erfolgreich geliked!`),
+        (error) => console.error('Fehler beim Liken des Blogs:', error),
       );
     } else {
       console.log(`Blog ${blog.id} wurde bereits geliked.`);
     }
   }
 
+  // Teilt einen Blog-Link
   onShare(blog: Blog): void {
     const shareUrl = `${window.location.origin}/blog-details/${blog.id}`;
     navigator.clipboard.writeText(shareUrl).then(() => {
