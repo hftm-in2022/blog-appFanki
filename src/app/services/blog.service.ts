@@ -34,4 +34,10 @@ export class BlogService {
   deleteBlog(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  checkTitleExists(title: string): Observable<boolean> {
+    return this.http
+      .get<{ exists: boolean }>(`${this.apiUrl}/check-title?title=${title}`)
+      .pipe(map((response) => response.exists));
+  }
 }

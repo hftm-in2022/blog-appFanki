@@ -5,13 +5,19 @@ import { Observable, of } from 'rxjs';
 
 export function titleExistsValidator(blogService: BlogService) {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
-    if (!control.value) {
-      // Wenn kein Titel eingegeben ist, gibt es keinen Fehler
+    const value = control.value;
+
+    if (!value || typeof value !== 'string') {
+      // Wenn kein gültiger Wert eingegeben ist, gibt es keinen Fehler
       return of(null);
     }
-    return blogService.checkTitleExists(control.value).pipe(
+
+    return blogService.checkTitleExists(value).pipe(
       map((exists) => (exists ? { titleExists: true } : null)), // Fehler, falls Titel existiert
-      catchError(() => of(null)), // Keine Fehler bei API-Problemen
+      catchError((error) => {
+        console.error('Fehler beim Überprüfen des Titels:', error);
+        return of(null); // Keine Fehler bei API-Problemen
+      }),
     );
   };
 }
