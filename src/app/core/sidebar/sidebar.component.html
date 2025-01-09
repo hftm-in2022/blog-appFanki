@@ -1,0 +1,77 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar -->
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar class="menu-toolbar"> Menu </mat-toolbar>
+    <mat-nav-list>
+      <!-- Navigation -->
+      <a
+        mat-list-item
+        routerLink="/overview"
+        routerLinkActive="router-link-active"
+      >
+        Overview
+      </a>
+      <ng-container
+        *ngIf="authService.isAuthenticated | async; else notAuthenticated"
+      >
+        <a
+          mat-list-item
+          routerLink="/add-blog"
+          routerLinkActive="router-link-active"
+        >
+          Add Blog
+        </a>
+        <a
+          mat-list-item
+          (click)="logout()"
+          (keyup.enter)="logout()"
+          tabindex="0"
+          >Logout</a
+        >
+      </ng-container>
+
+      <!-- Fallback für nicht authentifizierte Benutzer -->
+      <ng-template #notAuthenticated>
+        <a mat-list-item (click)="login()" (keyup.enter)="login()" tabindex="0"
+          >Login</a
+        >
+      </ng-template>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Content -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="app-toolbar">
+      <!-- Hamburger-Menü für mobile Geräte -->
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Blog-App</span>
+      <div class="spacer"></div>
+      <span
+        *ngIf="
+          authService.isAuthenticated | async;
+          else notAuthenticatedMessage
+        "
+        class="user-name"
+      >
+        Angemeldet als: {{ authService.userName$ | async }}
+      </span>
+      <ng-template #notAuthenticatedMessage>
+        <span class="user-name">Nicht angemeldet</span>
+      </ng-template>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
