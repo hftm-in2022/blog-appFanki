@@ -1,43 +1,27 @@
 import { Routes } from '@angular/router';
-import { BlogDetailResolver } from './resolvers/blog-detail.resolver';
-//import { isAuthenticatedGuard } from './guard/is-authenticated.guard';
-import { LoginPageComponent } from './features/login-page/login-page.component';
-import { BlogOverviewPageComponent } from './features/blog-overview-page/blog-overview-page.component';
-import { RegisterPageComponent } from './features/register-page/register-page.component';
+import { authGuard } from './core/guards/auth.guard';
 
-export const routes: Routes = [
+export const APP_ROUTES: Routes = [
   {
     path: '',
-    component: BlogOverviewPageComponent, // Blog-Seite als Startseite
+    redirectTo: 'overview',
+    pathMatch: 'full',
   },
   {
-    path: 'login',
-    component: LoginPageComponent, // Login-Seite
-  },
-  {
-    path: 'blog-details/:id',
+    path: 'overview',
     loadChildren: () =>
-      import('./features/blog-details-page/blog-details.module').then(
-        (m) => m.BlogDetailsModule,
-      ),
-    resolve: {
-      blog: BlogDetailResolver, // BlogDetailResolver zum Laden der Blog-Daten vor dem Navigieren
-    },
+      import('./features/blog-overview-page/blog-overview-page.routes'),
   },
+
+  {
+    path: 'detail',
+    loadChildren: () =>
+      import('./features/blog-detail-page/blog-detail-page.routes'),
+  },
+
   {
     path: 'add-blog',
-    loadChildren: () =>
-      import('./features/add-blog-page/add-blog-page.module').then(
-        (m) => m.AddBlogPageModule,
-      ),
-    //canActivate: [isAuthenticatedGuard], // Guard für Authentifizierung
-  },
-  {
-    path: 'register',
-    component: RegisterPageComponent, // Registrierungs-Seite
-  },
-  {
-    path: '**',
-    redirectTo: '', // Weiterleitung zu Blog-Seite bei ungültigen Routen
+    loadChildren: () => import('./features/add-blog-page/add-blog-page.routes'),
+    canActivate: [authGuard],
   },
 ];

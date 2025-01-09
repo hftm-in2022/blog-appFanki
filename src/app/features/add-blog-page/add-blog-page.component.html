@@ -1,53 +1,79 @@
-<form [formGroup]="blogForm" (ngSubmit)="onSubmit()" class="blog-form">
-  <mat-form-field appearance="outline">
-    <mat-label>Title*</mat-label>
-    <input
-      matInput
-      formControlName="title"
-      placeholder="Enter the blog title"
-    />
-    <mat-error *ngIf="blogForm.get('title')?.hasError('required')">
-      Title is required.
-    </mat-error>
-    <mat-error *ngIf="blogForm.get('title')?.hasError('minlength')">
-      Title must be at least 5 characters long.
-    </mat-error>
-    <mat-error *ngIf="blogForm.get('title')?.hasError('titleExists')">
-      This title already exists. Please choose another.
-    </mat-error>
-  </mat-form-field>
+<div class="add-blog-page">
+  <h2>Neuen Blog hinzufügen</h2>
+  <form [formGroup]="blogForm" class="blog-form">
+    <!-- Titel -->
+    <div class="form-group">
+      <label for="title">Titel</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        [class.invalid]="title?.invalid && title?.touched"
+      />
+      <div class="error" *ngIf="title?.invalid && title?.touched">
+        <small *ngIf="title?.errors?.['required']"
+          >Titel ist erforderlich.</small
+        >
+        <small *ngIf="title?.errors?.['minlength']">
+          Titel muss mindestens 3 Zeichen lang sein.
+        </small>
+        <small *ngIf="title?.errors?.['titleExists']"
+          >Der Titel existiert bereits.</small
+        >
+      </div>
+    </div>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Content*</mat-label>
-    <textarea
-      matInput
-      formControlName="content"
-      placeholder="Write your blog content"
-    ></textarea>
-    <mat-error *ngIf="blogForm.get('content')?.hasError('required')">
-      Content is required.
-    </mat-error>
-  </mat-form-field>
+    <!-- Inhalt -->
+    <div class="form-group">
+      <label for="content">Inhalt</label>
+      <textarea
+        id="content"
+        formControlName="content"
+        [class.invalid]="content?.invalid && content?.touched"
+      ></textarea>
+      <div class="error" *ngIf="content?.invalid && content?.touched">
+        <small *ngIf="content?.errors?.['required']"
+          >Inhalt ist erforderlich.</small
+        >
+        <small *ngIf="content?.errors?.['minlength']">
+          Inhalt muss mindestens 10 Zeichen lang sein.
+        </small>
+      </div>
+    </div>
 
-  <div class="form-actions">
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="blogForm.invalid || isSubmitting"
-    >
-      {{ isSubmitting ? "Saving..." : "Save Blog" }}
-    </button>
-    <button mat-raised-button color="warn" type="button" (click)="onReset()">
-      Reset
-    </button>
-    <button
-      mat-raised-button
-      color="accent"
-      type="button"
-      (click)="goBackToBlogs()"
-    >
-      Back to Blogs
-    </button>
-  </div>
-</form>
+    <!-- Bild-Upload -->
+    <div class="form-group">
+      <label for="image">Bild hochladen</label>
+      <input
+        id="image"
+        type="file"
+        (change)="onImageUpload($event)"
+        accept="image/*"
+      />
+      <div class="error" *ngIf="uploadError">
+        <small>{{ uploadError }}</small>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-actions">
+      <button type="button" class="btn back" (click)="goBack()">
+        ← Zurück zu den Blogs
+      </button>
+      <button type="button" class="btn reset" (click)="onReset()">
+        Zurücksetzen
+      </button>
+      <button
+        type="button"
+        class="btn save"
+        (click)="onSave()"
+        [disabled]="blogForm.invalid || isSaving"
+      >
+        <ng-container *ngIf="!isSaving">Speichern</ng-container>
+        <ng-container *ngIf="isSaving">
+          <span class="spinner"></span> Speichern...
+        </ng-container>
+      </button>
+    </div>
+  </form>
+</div>

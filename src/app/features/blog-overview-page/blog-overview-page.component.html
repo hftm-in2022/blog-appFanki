@@ -1,54 +1,33 @@
-<h1 class="page-title">{{ title }}</h1>
-
-<!-- Nachricht anzeigen, wenn keine Blogs verfügbar sind -->
-<div *ngIf="blogs.length === 0 && !isLoading" class="no-blogs">
-  <p>Keine Blogs verfügbar.</p>
-</div>
-
-<!-- Ladeindikator -->
-<mat-spinner *ngIf="isLoading" diameter="40"></mat-spinner>
-
-<!-- Blogkarten -->
-<div class="blog-container">
-  <div class="blog-row" *ngFor="let row of blogRows">
-    <div
-      class="blog-card"
-      *ngFor="let blog of row"
-      (click)="navigateToDetails(blog.id)"
-      tabindex="0"
-      (keyup.enter)="navigateToDetails(blog.id)"
-      role="button"
-      aria-label="Öffne Blogdetails"
-    >
-      <img
-        class="blog-image"
-        [src]="blog.headerImageUrl"
-        alt="Header Image"
-        *ngIf="blog.headerImageUrl"
-      />
-      <div class="blog-content">
-        <span class="blog-author">{{ blog.author }}</span>
-        <h2 class="blog-title">{{ blog.title }}</h2>
-        <p class="blog-preview">{{ blog.contentPreview }}</p>
-        <div class="blog-info">
-          <p>
-            <strong>{{ blog.updatedAt | date: "short" }}</strong>
-          </p>
-        </div>
-      </div>
-    </div>
+<!-- Zeige Lade- oder Fehlerzustand an -->
+<div class="blog-overview-container">
+  <!-- Spinner anzeigen, solange isLoadingList = true -->
+  <div class="spinner-container" *ngIf="isLoadingList">
+    <mat-progress-spinner
+      mode="indeterminate"
+      diameter="50"
+    ></mat-progress-spinner>
+    <p>Loading data...</p>
   </div>
-</div>
+  <div *ngIf="errorDetail as e">
+    <p style="color: red">{{ e }}</p>
+  </div>
 
-<!-- Button zum Laden weiterer Blogs -->
-<div class="load-more">
-  <button
-    class="load-more-button"
-    mat-raised-button
-    color="primary"
-    (click)="loadMoreBlogs()"
-    [disabled]="currentIndex + maxBlogs >= blogs.length"
-  >
-    Mehr laden
-  </button>
+  <div class="blog-container">
+    <ng-container *ngIf="paginatedBlogs as blogs">
+      <ng-container *ngFor="let blog of blogs; trackBy: trackBlog">
+        <app-blog-overview-card
+          [blog]="blog"
+          [routerLink]="['/detail', blog.id]"
+          routerLinkActive="router-link-active"
+        ></app-blog-overview-card>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <!-- Button zum Laden weiterer Blogs -->
+  <div class="load-more-container" *ngIf="hasMoreBlogs">
+    <button class="load-more-button" (click)="loadMoreBlogs()">
+      Mehr Blogs laden
+    </button>
+  </div>
 </div>

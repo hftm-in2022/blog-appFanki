@@ -1,57 +1,102 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { BlogBackendService } from '../../core/services/blog-backend.service';
+import { BlogTitleValidator } from '../../core/validators/blog-title.validator';
 
 @Component({
-  selector: 'app-add-blog-page',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-  ],
+  selector: 'app-add-blog',
   templateUrl: './add-blog-page.component.html',
   styleUrls: ['./add-blog-page.component.scss'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class AddBlogPageComponent {
   blogForm: FormGroup;
-  isSubmitting = false;
+  isSaving = false;
+  uploadError: string | null = null;
+  uploadedImage: File | null = null;
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
+    private blogService: BlogBackendService,
+    private blogTitleValidator: BlogTitleValidator,
     private router: Router,
   ) {
-    this.blogForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(5)]],
-      content: ['', [Validators.required]],
+    this.blogForm = this.formBuilder.group({
+      title: [
+        '',
+        [Validators.required, Validators.minLength(3)],
+        [this.blogTitleValidator.validate.bind(this.blogTitleValidator)],
+      ],
+      content: ['', [Validators.required, Validators.minLength(10)]],
     });
   }
 
-  onSubmit(): void {
-    if (this.blogForm.valid) {
-      this.isSubmitting = true;
-      console.log('Blog:', this.blogForm.value);
+  get title() {
+    return this.blogForm.get('title');
+  }
 
-      // Simulierte Backend-Speicherung
-      setTimeout(() => {
-        this.isSubmitting = false;
-        this.blogForm.reset();
-      }, 2000);
+  get content() {
+    return this.blogForm.get('content');
+  }
+
+  onImageUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (!file.type.startsWith('image/')) {
+        this.uploadError = 'Nur Bilddateien sind erlaubt.';
+        this.uploadedImage = null;
+      } else {
+        this.uploadError = null;
+        this.uploadedImage = file;
+      }
     }
   }
 
-  onReset(): void {
-    this.blogForm.reset();
+  onSave() {
+    if (this.blogForm.invalid) return;
+
+    this.isSaving = true;
+
+    const blogData = {
+      ...this.blogForm.value,
+      image: this.uploadedImage, // Bild hinzufügen
+    };
+
+    this.blogService
+      .addBlog(blogData)
+      .pipe(finalize(() => (this.isSaving = false)))
+      .subscribe(
+        () => {
+          const confirmed = window.confirm(
+            'Blog erfolgreich gespeichert! Möchten Sie zur Übersicht zurückkehren?',
+          );
+          if (confirmed) {
+            this.router.navigate(['/overview']);
+          }
+        },
+        () => {
+          alert('Fehler beim Speichern des Blogs.');
+        },
+      );
   }
 
-  goBackToBlogs(): void {
-    this.router.navigate(['/']); // Zur Blog-Übersichtsseite navigieren
+  onReset() {
+    this.blogForm.reset();
+    this.uploadedImage = null;
+    this.uploadError = null;
+  }
+
+  goBack() {
+    this.router.navigate(['/overview']);
   }
 }

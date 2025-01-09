@@ -1,18 +1,23 @@
-import {
-  ApplicationConfig,
-  importProvidersFrom,
-  provideZoneChangeDetection,
-} from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http'; // HttpClientModule importieren
-import { routes } from './app.routes';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { ErrorHandler } from '@angular/core';
+import { APP_ROUTES } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideHttpClient } from '@angular/common/http';
+import { GlobalErrorHandler } from './core/services/global-error-handler.service';
+import { authConfig } from './core/auth/auth.config';
+import { provideAuth } from 'angular-auth-oidc-client';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    importProvidersFrom(HttpClientModule), // HttpClientModule hier hinzufügen
+    provideRouter(APP_ROUTES, withComponentInputBinding()),
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
     provideAnimationsAsync(),
+    provideHttpClient(),
+    provideAuth(authConfig),
   ],
 };

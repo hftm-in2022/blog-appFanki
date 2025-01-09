@@ -1,27 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './core/components/header/header.component';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { HeaderComponent } from './features/header/header.component';
+import { AuthService } from './core/auth/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, HeaderComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   title = 'blog-app';
-
-  constructor(private oidcSecurityService: OidcSecurityService) {}
+  private readonly authService = inject(AuthService);
 
   ngOnInit(): void {
-    // Prüfen, ob der Benutzer authentifiziert ist
-    this.oidcSecurityService
-      .checkAuth()
-      .subscribe(({ isAuthenticated, userData }) => {
-        console.log('User authenticated:', isAuthenticated);
-        console.log('User data:', userData);
-      });
+    this.authService.initializeAuth(); // Sicherstellen, dass der Auth-Status überprüft wird
   }
 }

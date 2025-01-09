@@ -1,0 +1,57 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #282c34; // Dunkler Hintergrund für den Header
+  color: white;
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #4caf50;
+      }
+    }
+  }
+
+  .auth-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px; // Abstand zwischen den Buttons
+
+    .user-name {
+      font-size: 1rem;
+      color: #ffffff;
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: #4caf50; // Primäre Hintergrundfarbe der Buttons
+      color: white;
+      border: none;
+      padding: 8px 16px; // Polsterung für größere Klickfläche
+      border-radius: 4px; // Abgerundete Ecken
+      cursor: pointer; // Zeiger ändern bei Hover
+      font-size: 1rem; // Konsistente Schriftgröße
+      font-weight: bold;
+
+      &:hover {
+        background-color: #45a049; // Etwas dunklerer Grünton beim Hover
+      }
+    }
+  }
+}

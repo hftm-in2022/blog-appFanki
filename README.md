@@ -1,224 +1,71 @@
-# BlogApp
+# Angular Blog App
 
-Dieses Projekt wurde mit [Angular CLI](https://github.com/angular/angular-cli) Version 18.2.9 generiert.
+## Description
 
-## Inhaltsverzeichnis
+The Angular Blog App is a web application built using Angular framework, featuring SCSS for styling and employing best practices for code quality, testing, and deployment. This project serves as a platform to showcase blog posts and provide a seamless user experience.
 
-1. [Projektübersicht](#projektübersicht)
-2. [Entwicklungsserver](#entwicklungsserver)
-3. [Code-Qualität und Tests](#code-qualität-und-tests)
-4. [CI/CD-Pipeline für Deployment auf Azure](#cicd-pipeline-für-deployment-auf-azure)
-5. [Sicherheitsüberprüfung und Abhängigkeitsmanagement](#sicherheitsüberprüfung-und-abhängigkeitsmanagement)
-6. [Setup und Nutzung](#setup-und-nutzung)
-7. [Weiterführende Hilfe](#weiterführende-hilfe)
+## Features
 
-## Projektübersicht
+- Angular framework for dynamic web applications.
+- SCSS for enhanced styling capabilities.
+- Integrated ESLint for static code analysis.
+- Prettier for automatic code formatting.
+- CommitLint for enforcing commit message conventions.
+- Lint Staged and Husky for ensuring code quality on commits.
+- Continuous Integration and Continuous Deployment (CI/CD) with GitHub Actions.
+- Automated updates for Angular dependencies.
+- Deployed on Azure Static Web Apps.
 
-Dieses Repository enthält die grundlegende Entwicklungsumgebung für ein Angular-Projekt. Diese Einrichtung wurde im Rahmen der Iteration 0 des agilen Entwicklungsprozesses vorgenommen, um alle technischen Voraussetzungen für die Entwicklung sicherzustellen. Dies umfasst:
+## Installation
 
-1. Aufsetzen eines neuen Angular-Projekts mit SCSS als Präprozessor.
-2. Konfiguration eines öffentlichen GitHub-Repositories.
-3. Integration von Code-Qualitätstools für statische Codeanalyse und Formatierung.
-4. Einrichtung einer GitHub Actions CI/CD-Pipeline für automatische Builds, Tests, Sicherheitsüberprüfungen und Deployment auf Azure.
+To get started with this project, follow these steps:
 
-## Entwicklungsserver
+1. **Clone the repository:**
 
-- Starte den Entwicklungsserver mit:
-  ```bash
-  ng serve
-  ```
-- Öffne dann `http://localhost:4200/` im Browser. Die Anwendung wird automatisch aktualisiert, wenn Änderungen am Code vorgenommen werden.
-
-## Code-Qualität und Tests
-
-### Linting
-
-- Linting zur Code-Qualitätsprüfung wird über ESLint durchgeführt:
-  ```bash
-  npm run lint
-  ```
-
-### Unit-Tests
-
-- Unit-Tests werden mit Karma ausgeführt:
-  ```bash
-  npm run test -- --watch=false --browsers=ChromeHeadless
-  ```
-
-### End-to-End-Tests
-
-- E2E-Tests können mit einem geeigneten Framework ausgeführt werden. Installiere ein Tool wie Protractor oder Cypress und führe die Tests wie folgt aus:
-  ```bash
-  ng e2e
-  ```
-
-## CI/CD-Pipeline für Deployment auf Azure
-
-Das Projekt enthält eine GitHub Actions CI/CD-Pipeline, die automatische Builds, Tests, Sicherheitsüberprüfungen und das Deployment auf Azure durchführt.
-
-### Workflow-Übersicht
-
-Der Workflow läuft bei jedem Push in den `main`-Branch sowie bei Pull-Request-Events. Die Schritte umfassen:
-
-1. **Code Checkout**: Holt den neuesten Code vom Repository.
-2. **Node.js-Umgebung einrichten**: Verwendet Node.js Version 20.x.
-3. **Abhängigkeiten installieren**: Führt `npm ci` aus, um Abhängigkeiten basierend auf `package-lock.json` zu installieren.
-4. **Code-Qualitätsprüfungen und Tests**:
-   - **Linting** mit ESLint.
-   - **Unit-Tests** mit Karma.
-5. **Build**: Führt `ng build --prod` aus, um die Anwendung für die Produktion zu erstellen.
-6. **Sicherheitsüberprüfungen**:
-   - `npm audit` prüft auf Sicherheitslücken.
-   - `npm audit fix` behebt automatisch erkannte Schwachstellen.
-7. **Deployment auf Azure**:
-   - Die gebaute Anwendung wird mit `Azure/static-web-apps-deploy@v1` direkt auf Azure Static Web Apps bereitgestellt.
-
-### Automatisches Deployment
-
-Das Deployment erfolgt automatisch bei jedem Push in den `main`-Branch. Die CI/CD-Pipeline kümmert sich um den gesamten Workflow von Build über Tests und Sicherheitsüberprüfung bis hin zur Bereitstellung auf Azure.
-
-## Sicherheitsüberprüfung und Abhängigkeitsmanagement
-
-- **Sicherheitsüberprüfung**: `npm audit` überprüft die Abhängigkeiten auf Sicherheitslücken, während `npm audit fix` gefundene Schwachstellen automatisch behebt.
-- **Abhängigkeitsmanagement**: Der Workflow prüft veraltete Pakete mit `npm outdated` und aktualisiert Abhängigkeiten mit `npm update`, um sicherzustellen, dass das Projekt aktuell bleibt.
-
-## Setup und Nutzung
-
-### Voraussetzungen
-
-- **Node.js und npm** (mindestens Node.js v20.x und npm v7+)
-- **Angular CLI** (wird automatisch im Setup installiert)
-- **Azure CLI** (optional, falls das Deployment manuell getestet werden soll)
-- **Azure-Konto**: Für das automatische Deployment auf Azure ist ein Konto mit Berechtigungen erforderlich.
-
-### Projekt initialisieren und GitHub-Repository einrichten
-
-1. **Angular-Projekt erstellen**:
    ```bash
-   ng new blog-app --style=scss
-   cd blog-app
-   ```
-2. **Git initialisieren** und erstes Commit erstellen:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   ```
-3. **GitHub-Repository hinzufügen** und Änderungen pushen:
-   ```bash
-   git remote add origin https://github.com/<your-username>/blog-app.git
-   git push -u origin main
+   git clone https://github.com/hftm-in2022/angular-blog-app-hamsiga-rajaratnam.git
    ```
 
-## Aufgabe: Sprint1 - Blog-Daten in der AppComponent darstellen und Backend anbinden
+2. Navigate into the project directory:
 
-### 1. Anbindung des Backends
+```bash
+cd blog-app
+```
 
-- **CORS-Konfiguration**: Da das Backend extern bereitgestellt wird, musste CORS nicht explizit im Frontend konfiguriert werden. Die Anfragen werden direkt über die URL des Azure-gehosteten Backends abgesetzt, welches die entsprechenden CORS-Einstellungen implementiert.
-- **Datenvalidierung**: Die empfangenen Blogdaten werden in der Angular-Komponente `AppComponent` über die BlogService-Methode `getBlogs()` abgerufen und in einem TypeScript-Interface `Blog` typisiert. Diese Typisierung hilft bei der Validierung der Datenstruktur, sodass nur valide Daten in der Anwendung verarbeitet werden.
+3. Install the dependencies:
 
-### 2. Interceptor implementieren
+```bash
+npm install
+```
 
-- **Logging und CorrelationId-Interceptor**: Ein HTTP-Interceptor wurde implementiert, um entweder eine CorrelationId oder eine Logging-Funktion in jede Anfrage einzufügen. Dieser Interceptor fügt der Anfrage einen Header hinzu, der die Korrelation von Anfragen erleichtert oder das Logging für Debugging-Zwecke unterstützt. Der Interceptor wurde mithilfe von Angular's `HttpInterceptor`-Funktionalität implementiert und in der `AppModule`-Konfiguration registriert, sodass er bei jeder HTTP-Anfrage automatisch ausgeführt wird.
+4. Run the application:
 
-### 3. Datenanzeige mit Angular Control Flow Syntax, Flexbox und SCSS
+```bash
+ng serve
+```
 
-- **Angular Control Flow Syntax (`*ngIf`, `*ngFor`)**: Die `AppComponent` verwendet die Angular Control Flow Syntax, um dynamische Anzeigen zu steuern. Beispielsweise wird `*ngIf` verwendet, um den Ladeindikator anzuzeigen, während die Daten geladen werden, und `*ngFor`, um über die Liste der Blogs zu iterieren und jeden Blog als Karte anzuzeigen.
-- **Flexbox für responsive Darstellung**: Flexbox wird im SCSS verwendet, um die Blogkarten in einer responsiven Anordnung darzustellen. Die `.blog-container`-Klasse nutzt Flexbox, um die Karten gleichmäßig zu verteilen und bei unterschiedlichen Bildschirmgrößen automatisch anzupassen. Zusätzlich sorgen die CSS-Medienabfragen dafür, dass die Darstellung auf mobilen und Tablet-Geräten optimal bleibt.
-- **SCSS für Styling**: SCSS wurde verwendet, um die Anwendung zu gestalten und das Layout konsistent zu halten. Alle wichtigen UI-Elemente, wie der Like-Button, die Navigationspfeile und die Blog-Karten, sind im SCSS gestaltet. Die Animation des Like-Buttons wird ebenfalls im SCSS definiert, um eine visuelle Rückmeldung beim Liken eines Beitrags zu geben.
+5. Open your browser and navigate to:
 
-### Weitere Funktionen
+http://localhost:4200
 
-- **Blog-Erstellungsfunktion**: Die `AppComponent` enthält eine Formularansicht, die über den Button "Neuer Blog" oben rechts geöffnet werden kann. Über das Formular können Benutzer einen neuen Blogeintrag mit Titel, Autor und Inhalt erstellen. Der neue Blog wird zur Blogliste hinzugefügt und sofort angezeigt.
-- **Blog-Bearbeitungsfunktion**: In der Detailansicht eines Blogs gibt es eine Option, den Inhalt des Blogs zu bearbeiten. Diese Funktion ist über einen Bearbeiten-Button verfügbar und ermöglicht es dem Benutzer, Titel und Inhalt des Blogs zu aktualisieren. Änderungen werden direkt in der Blogliste gespeichert und angezeigt.
-- **Responsive Design**: Die Anwendung ist vollständig responsive und unterstützt verschiedene Bildschirmgrößen durch Flexbox und CSS-Medienabfragen. Dadurch passt sich die Darstellung der Blogs, Navigationselemente und Formularelemente an die jeweilige Bildschirmbreite an.
+## Code Quality Tools
 
-### Zusammenfassung der Technologien und Ansätze
+This project uses the following tools for maintaining code quality:
 
-- **Angular Services**: Der `BlogService` verwaltet alle HTTP-Anfragen an das Backend und sorgt für die Abstraktion der Datenzugriffe.
-- **Angular Interceptor**: Der HTTP-Interceptor fügt entweder Logging oder eine CorrelationId zu jeder Anfrage hinzu, um die Nachverfolgbarkeit und das Debugging zu erleichtern.
-- **Angular Control Flow Syntax**: `*ngIf` und `*ngFor` sorgen für dynamische und bedingte Anzeige der Daten.
-- **Flexbox und SCSS**: Flexbox und SCSS werden verwendet, um eine moderne und anpassbare Benutzeroberfläche zu schaffen, die auf allen Gerätetypen gut funktioniert.
+- ESLint: For static code analysis.
+- Prettier: For code formatting.
+- CommitLint: To check commit messages.
+- Lint Staged & Husky: To enforce code quality at commit time.
 
-Diese Umsetzung erfüllt alle Anforderungen und Best Practices für eine skalierbare und benutzerfreundliche Blog-Anwendung mit Angular.
+## CI/CD Pipeline
 
-### Sprint 3 - State Management
+This project is integrated with GitHub Actions for continuous integration and deployment. The pipeline will:
 
-### Komponenten:
+- Build the project on every commit.
+- Run unit tests and integration tests.
+- Automatically update Angular dependencies.
 
-#### **1. Kommunikation zwischen Komponenten mit Signals**
+## Deployment
 
-- `@Input` und `@Output` wurden durch **Angular Signals** ersetzt, um eine moderne, reaktive Datenflussstrategie zu implementieren.
-- Die Datenübergabe erfolgt nun über Methoden, die Signale aktualisieren, wodurch die Kontrolle granularer und die Performance verbessert wird.
-
-#### **Betroffene Komponenten:**
-
-1. **`BlogItemComponent`**:
-   - `@Input()` wurde durch **WritableSignal** ersetzt.
-   - Methoden wie `setBlog` und `setIsDetailView` aktualisieren die Signale für Blogdaten und Detailansicht dynamisch.
-2. **`BlogListComponent`**:
-   - Die Blogliste (`blogs`) wird als **WritableSignal** definiert.
-   - Setter-Methoden wie `setBlogs` ermöglichen die Aktualisierung der Liste von Blogs ohne `@Input`.
-
----
-
-#### **2. Performance-Optimierung durch OnPush Change Detection**
-
-- Alle betroffenen Komponenten verwenden die `ChangeDetectionStrategy.OnPush`, um unnötige DOM-Updates zu vermeiden.
-- Diese Strategie verbessert die Effizienz der Anwendung insbesondere bei größeren Datenmengen.
-
----
-
-#### **3. Template-basierte Datenbindung**
-
-- Im Template von `BlogListComponent` wird mithilfe von Angular Directives wie `*ngFor` eine Liste von Blogs dynamisch gerendert.
-- Jeder Blog-Eintrag wird an `BlogItemComponent` übergeben, ohne `@Input` zu verwenden, sondern über direkte Methodenzugriffe auf die Komponente.
-
----
-
-#### **4. Modularität und Wiederverwendbarkeit**
-
-- Die `BlogItemComponent` ist als eigenständige, wiederverwendbare Komponente implementiert. Sie kann in unterschiedlichen Kontexten (z. B. Blogübersicht und
-  Detailansicht) verwendet werden.
-
-  ### Redux-basiertes State-Management
-
-#### **1. Implementierung eines zentralen State-Stores**
-
-Ein zentraler State-Store (`StateStore`) wurde implementiert, der mithilfe von **Signals** und **RxJS** den Zustand der Anwendung verwaltet. Der Store bietet folgende Funktionen:
-
-- **Zentrales Management der Blogliste**:
-  - Die Blogliste wird durch ein `WritableSignal` verwaltet und kann von jeder Komponente gelesen werden.
-  - Änderungen an der Blogliste (z. B. Hinzufügen, Löschen) werden durch zentrale Methoden wie `addBlog`, `deleteBlog` oder `loadBlogs` vorgenommen.
-- **Redux-ähnliche Aktionen**:
-  - Mithilfe eines RxJS-Subjects (`actions$`) können Aktionen ausgelöst und überwacht werden.
-  - Beispiele: `LOAD_BLOGS`, `ADD_BLOG`, `DELETE_BLOG`, `FETCH_BLOGS_SUCCESS`, `FETCH_BLOGS_FAILURE`.
-
-#### **2. State-Management und API-Integration**
-
-Der State-Store kann Blogs direkt von einer externen API abrufen und in den zentralen Zustand laden.
-
-- Die Methode `fetchBlogs` ruft Daten von einer API ab und aktualisiert die Blogliste im Store.
-- Fehler werden geloggt, und Statusaktionen (`FETCH_BLOGS_SUCCESS`, `FETCH_BLOGS_FAILURE`) werden ausgelöst.
-
-#### **3. Verbindung der Komponenten mit dem Store**
-
-- **`BlogListComponent`**:
-  - Liest die Blogliste direkt aus dem Store.
-  - Reagiert automatisch auf Änderungen am Signal und aktualisiert die Ansicht ohne zusätzliche Logik.
-- **`BlogDetailsPageComponent`**:
-  - Liest die Blogdetails basierend auf der Blog-ID aus dem Store.
-
-#### **4. Performance-Optimierung**
-
-Alle betroffenen Komponenten verwenden die `ChangeDetectionStrategy.OnPush`, um unnötige DOM-Aktualisierungen zu vermeiden.
-
----
-
-### **Zusammenfassung**
-
-Mit diesem Ansatz wurde ein zentralisierte
-
-## Weiterführende Hilfe
-
-Für weitere Informationen zur Angular CLI kannst du die [Angular CLI-Dokumentation](https://angular.dev/tools/cli) besuchen.
+The application is automatically deployed to Azure Static Web Apps. You can access the live application at Azure Deployment Link.
+https://purple-moss-08e6b6a03.5.azurestaticapps.net

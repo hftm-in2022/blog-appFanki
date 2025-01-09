@@ -1,60 +1,64 @@
-import { Component, OnInit } from '@angular/core';
-import { Blog } from '../../interfaces/blog';
-import { BlogService } from '../../services/blog.service';
-import { CommonModule, DatePipe } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router } from '@angular/router';
+import { BlogOverviewCardComponent } from '../../shared/blog-overview-card/blog-overview-card.component';
+import { BlogStore } from '../../core/stores/blog-state.store';
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-blog-overview-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatProgressSpinnerModule, DatePipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    BlogOverviewCardComponent,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './blog-overview-page.component.html',
   styleUrls: ['./blog-overview-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlogOverviewPageComponent implements OnInit {
-  blogs: Blog[] = [];
-  blogRows: Blog[][] = [];
-  currentIndex = 0;
-  maxBlogs = 9; // Zeige bis zu 9 Blogs pro Ladung an
-  blogsPerRow = 3;
-  isLoading = true;
-  title = 'BlogApp';
+  private store = inject(BlogStore);
 
-  constructor(
-    private blogService: BlogService,
-    private router: Router,
-  ) {}
+  private pageSize = 8; // Anzahl Blogs pro Seite
+  private currentPage = 1; // Aktuelle Seite
 
   ngOnInit(): void {
-    this.blogService.getBlogs().subscribe(
-      (response) => {
-        this.blogs = response.data;
-        this.updateDisplayedBlogs();
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Fehler beim Abrufen der Blogs:', error);
-        this.isLoading = false;
-      },
+    this.store.loadAll();
+  }
+
+  get isLoadingList() {
+    return this.store.isLoadingList();
+  }
+
+  trackBlog(index: number, blog: { id: number }) {
+    return blog.id;
+  }
+
+  get entries() {
+    return this.store.entries();
+  }
+
+  get errorDetail() {
+    return this.store.errorDetail();
+  }
+
+  get paginatedBlogs() {
+    const allBlogs = this.entries?.data || [];
+    return allBlogs.slice(0, this.currentPage * this.pageSize);
+  }
+
+  get hasMoreBlogs() {
+    return (
+      this.entries &&
+      this.entries.data &&
+      this.entries.data.length > this.currentPage * this.pageSize
     );
   }
 
-  updateDisplayedBlogs(): void {
-    const displayed = this.blogs.slice(0, this.currentIndex + this.maxBlogs);
-    this.blogRows = [];
-    for (let i = 0; i < displayed.length; i += this.blogsPerRow) {
-      this.blogRows.push(displayed.slice(i, i + this.blogsPerRow));
-    }
-  }
-
-  loadMoreBlogs(): void {
-    this.currentIndex += this.maxBlogs;
-    this.updateDisplayedBlogs();
-  }
-
-  navigateToDetails(blogId: number): void {
-    this.router.navigate(['/blog-details', blogId]);
+  loadMoreBlogs() {
+    this.currentPage++;
   }
 }
