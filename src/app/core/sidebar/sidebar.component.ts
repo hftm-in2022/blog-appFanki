@@ -6,9 +6,10 @@ import { AuthService } from '../../core/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatListModule } from '@angular/material/list'; // Import für MatNavList
-import { MatButtonModule } from '@angular/material/button'; // Import für Buttons
-import { MatIconModule } from '@angular/material/icon'; // Import für Icons
+import { MatSidenav } from '@angular/material/sidenav';
+import { ViewChild } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -18,15 +19,15 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatListModule, // Hinzufügen für MatNavList
-    MatButtonModule, // Hinzufügen für Buttons
-    MatIconModule, // Hinzufügen für Icons
+    MatListModule,
+    MatIconModule,
     RouterModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
+  @ViewChild('drawer') drawer!: MatSidenav;
   private breakpointObserver = inject(BreakpointObserver);
   authService: AuthService = inject(AuthService);
 
