@@ -190,7 +190,6 @@ Die Anwendung wird mit einer GitHub Actions CI/CD-Pipeline bereitgestellt, die f
 
 ### Feature Branch erstellen:
 
-```bash
 git checkout -b feature-name
 
 ### Änderungen committen:
@@ -199,7 +198,6 @@ git checkout -b feature-name
 
 ### Branch pushen:
 
-```bash
 git push origin feature-name
 
 ### Pull Request erstellen:
