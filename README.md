@@ -2,7 +2,8 @@
 
 Die Angular Blog App ist eine Webanwendung, die mit dem Angular-Framework entwickelt wurde. Sie verwendet SCSS für das Styling und implementiert Best Practices in den Bereichen Codequalität, Tests und Deployment. Die Anwendung dient als Plattform, um Blogposts anzuzeigen und eine benutzerfreundliche Erfahrung zu bieten.
 
-[Visit Website](https://icy-river-0bba8530f-7.eastus2.5.azurestaticapps.net)
+Azure Seite läuft nur über klicken des links in der Build Actions bei Reload oder kopieren des Links wird ein Fehler angezeigt
+[Visit Website]([https://icy-river-0bba8530f-7.eastus2.5.azurestaticapps.net](https://icy-river-0bba8530f.5.azurestaticapps.net/overview))
 
 ---
 
@@ -118,14 +119,12 @@ Dieses Repository enthält die grundlegende Entwicklungsumgebung für eine Angul
 
 **Code-Qualität prüfen:**
 
-````bash
 npm run lint
 
 ### Unit-Tests
 
 **Tests ausführen:**
 
-```bash
 npm run test -- --watch=false --browsers=ChromeHeadless
 
 ## CI/CD-Pipeline für Deployment auf Azure
