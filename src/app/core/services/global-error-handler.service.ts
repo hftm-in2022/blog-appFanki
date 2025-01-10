@@ -13,20 +13,4 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     console.error('GlobalErrorHandler:', error);
   }
-
-  /*
-  Nicht mein Backend deshalb weggelassen
-
-  postCustomData(error: Error, message: string): void {
-    const req = new XMLHttpRequest();
-    req.open('POST', `${environment.serviceUrl}/api/report-error/client-fatal`);
-    req.setRequestHeader('Content-Type', 'application/json');
-    req.send(
-      JSON.stringify({
-        "client-message": message || '',
-        "client-error": error.stack || '',
-      })
-    );
-  }
-    */
 }
