@@ -11,6 +11,7 @@ import { ViewChild } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,6 +23,7 @@ import { RouterModule } from '@angular/router';
     MatListModule,
     MatIconModule,
     RouterModule,
+    TranslateModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
@@ -30,6 +32,10 @@ export class SidebarComponent {
   @ViewChild('drawer') drawer!: MatSidenav;
   private breakpointObserver = inject(BreakpointObserver);
   authService: AuthService = inject(AuthService);
+  translate: TranslateService = inject(TranslateService);
+
+  languages = ['en', 'de', 'fr', 'it']; // Verfügbare Sprachen
+  currentLanguage = this.translate.currentLang || 'en'; // Standard auf 'en'
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe([Breakpoints.Handset])
@@ -44,5 +50,13 @@ export class SidebarComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  switchLanguage(lang: string): void {
+    this.translate.use(lang);
+    this.currentLanguage = lang;
+
+    // Sprache im LocalStorage speichern
+    localStorage.setItem('preferredLanguage', lang);
   }
 }
