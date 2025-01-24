@@ -4,61 +4,74 @@
 
 .sidenav {
   width: 250px;
-  background-color: #2c2c2c; // Dunkler Hintergrund
+  background-color: #0055a5; // Hellere Blau-Farbe
   color: white;
 
   mat-toolbar.menu-toolbar {
-    color: black;
-    background-color: white;
+    color: white;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.5rem; // Gleiche Schriftgröße wie "Menu"
   }
 
   mat-nav-list {
     a {
       color: white;
       text-decoration: none;
+      font-size: 1.5rem; // Gleiche Schriftgröße wie "Menu"
+      font-weight: bold;
 
       &:hover {
-        background-color: #4caf50; // Grüner Hover
+        background-color: rgba(255, 255, 255, 0.2); // Hover-Effekt
       }
     }
   }
 }
 
 .mat-toolbar {
-  background-color: #333333; // Header dunkel machen
+  background-color: #004080; // Dunkleres Blau für Toolbar
   color: white;
 
-  .user-name {
-    margin-left: 15px;
+  .spacer {
+    flex: 1;
   }
-}
 
-.language-selector {
-  display: flex;
-  align-items: center;
-
-  .language-button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &.active {
+  .language-selector {
+    display: flex;
+    gap: 1rem;
+    justify-content: center; // Zentriert die Sprachauswahl
+    button {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
       font-weight: bold;
-      text-decoration: underline;
-    }
+      cursor: pointer;
+      transition: background-color 0.3s;
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      &.active {
+        font-weight: bold;
+        text-decoration: underline;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  .user-icon {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      font-size: 1.5rem;
+      color: white;
     }
   }
 }
 
-.spacer {
-  flex: 1;
+/* Entfernt den abgerundeten weißen Übergang */
+.mat-sidenav-container {
+  border-left: none;
 }

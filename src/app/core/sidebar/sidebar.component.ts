@@ -10,6 +10,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { ViewChild } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -22,6 +23,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatToolbarModule,
     MatListModule,
     MatIconModule,
+    MatTooltipModule,
     RouterModule,
     TranslateModule,
   ],

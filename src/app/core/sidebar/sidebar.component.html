@@ -39,13 +39,9 @@
 
       <!-- Fallback für nicht authentifizierte Benutzer -->
       <ng-template #notAuthenticated>
-        <a
-          mat-list-item
-          (click)="login()"
-          (keyup.enter)="login()"
-          tabindex="0"
-          >{{ "SIDEBAR.LOGIN" | translate }}</a
-        >
+        <a mat-list-item (click)="login()" (keyup.enter)="login()" tabindex="0">
+          {{ "SIDEBAR.LOGIN" | translate }}
+        </a>
       </ng-template>
     </mat-nav-list>
   </mat-sidenav>
@@ -65,6 +61,7 @@
       </button>
       <span>{{ "APP.TITLE" | translate }}</span>
       <div class="spacer"></div>
+
       <!-- Sprachauswahl -->
       <div class="language-selector">
         <button
@@ -76,18 +73,21 @@
           {{ lang.toUpperCase() }}
         </button>
       </div>
-      <span
-        *ngIf="
-          authService.isAuthenticated | async;
-          else notAuthenticatedMessage
-        "
-        class="user-name"
+
+      <!-- Benutzerstatus -->
+      <ng-container
+        *ngIf="authService.isAuthenticated | async; else notLoggedIn"
       >
-        {{ "SIDEBAR.LOGGED_IN_AS" | translate }}:
-        {{ authService.userName$ | async }}
-      </span>
-      <ng-template #notAuthenticatedMessage>
-        <span class="user-name">{{ "SIDEBAR.NOT_LOGGED_IN" | translate }}</span>
+        <span>{{ "SIDEBAR.LOGGED_IN_AS" | translate }}</span>
+        <span
+          class="user-icon"
+          matTooltip="{{ authService.userName$ | async }}"
+        >
+          <mat-icon>account_circle</mat-icon>
+        </span>
+      </ng-container>
+      <ng-template #notLoggedIn>
+        <span>{{ "SIDEBAR.NOT_LOGGED_IN" | translate }}</span>
       </ng-template>
     </mat-toolbar>
     <router-outlet></router-outlet>
