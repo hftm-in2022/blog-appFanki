@@ -16,6 +16,7 @@ export class AuthService {
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
       console.log('Auth Status:', isAuthenticated);
       this.oidcSecurityService.userData$.subscribe((userData) => {
+        // warum wird hier ein subscribe gemacht? subscribe innerhalb subscribe
         console.log('Benutzerdaten direkt aus userData$:', userData); // Debugging
       });
     });
@@ -37,6 +38,7 @@ export class AuthService {
   }
 
   get isAuthenticated(): Observable<boolean> {
+    // ein feld isAuthenicated wäre besser. Bei jedem Call wird eine neue pipe gebaut.
     return this.oidcSecurityService.isAuthenticated$.pipe(
       map((result: AuthenticatedResult) => result.isAuthenticated),
     );

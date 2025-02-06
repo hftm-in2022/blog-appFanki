@@ -54,6 +54,7 @@
             class="comment"
             *ngFor="let comment of selectedComments(); trackBy: trackComment"
           >
+            <!-- besser @for und @if verwenden anstelle von ngIf und ngFor -->
             <p>
               <strong>{{ comment.author }} says:</strong>
             </p>

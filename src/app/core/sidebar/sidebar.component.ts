@@ -24,10 +24,10 @@ import { RouterModule } from '@angular/router';
     RouterModule,
   ],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
+  styleUrls: ['./sidebar.component.scss'], // changeDetectionStrategy.OnPush?
 })
 export class SidebarComponent {
-  @ViewChild('drawer') drawer!: MatSidenav;
+  @ViewChild('drawer') drawer!: MatSidenav; // besser viewChild Signal verwenden
   private breakpointObserver = inject(BreakpointObserver);
   authService: AuthService = inject(AuthService);
 

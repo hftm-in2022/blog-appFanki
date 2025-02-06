@@ -100,3 +100,5 @@ export class AddBlogPageComponent {
     this.router.navigate(['/overview']);
   }
 }
+
+// onSubmit auf dem Form verwenden

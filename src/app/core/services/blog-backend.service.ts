@@ -73,10 +73,10 @@ export class BlogBackendService {
     return this.oidcSecurityService.getAccessToken().pipe(
       switchMap((token) => {
         const headers = new HttpHeaders({
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // kann mit dem authInterceptor gelöst werden.
         });
         return this.httpClient.post<Blog>(
-          `${environment.serviceUrl}/entries`,
+          `${environment.serviceUrl}/entries`, // keine input output validierung
           blog,
           { headers },
         );

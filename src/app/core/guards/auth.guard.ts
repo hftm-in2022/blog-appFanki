@@ -19,6 +19,7 @@ export const authGuard: CanActivateFn = () => {
         resolve(false);
       } else {
         oidcSecurityService.getAccessToken().subscribe((accessToken) => {
+          // subscribe innerhalb subscribe unbedingt vermeiden
           if (accessToken && hasRole(accessToken, 'user')) {
             resolve(true);
           } else {

@@ -10,7 +10,7 @@ import {
 } from '../services/blog-backend.service';
 
 // Unser State-Typ
-export interface BlogState {
+export type BlogState = {
   // LISTE
   entries: Entries | null;
   isLoadingList: boolean;
@@ -55,6 +55,7 @@ export const BlogStore = signalStore(
 
       // Observable-Aufruf via subscribe (du könntest auch rxMethod nutzen)
       blogBackend.getBlogPosts().subscribe({
+        // subscribe innerhalb einer Methode, besser mit rxMethod oder mit promises
         next: (entries) => {
           patchState(store, {
             entries,

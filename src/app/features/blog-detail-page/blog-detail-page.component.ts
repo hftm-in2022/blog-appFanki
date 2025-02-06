@@ -54,6 +54,7 @@ export class BlogDetailPageComponent implements OnInit {
   }
 
   get isLoadingDetail() {
+    // das signal direkt im template verwenden
     return this.store.isLoadingDetail();
   }
 

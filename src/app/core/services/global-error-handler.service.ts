@@ -8,6 +8,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   handleError(error: Error): void {
     const message = error.message || 'Ein unerwarteter Fehler ist aufgetreten.';
     this.snackBar.open(message, 'Schliessen', {
+      // macht es Sinn dem Benutzer die technische Fehlermeldung anzuzeigen?
       duration: 5000,
     });
 
